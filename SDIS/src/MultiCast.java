@@ -3,7 +3,7 @@ import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
 
-public class MultiCast {
+public class MultiCast extends Thread{
     public MulticastSocket multCast_socket;
     public InetAddress multCast_address;
     public int multCast_port;
@@ -19,17 +19,15 @@ public class MultiCast {
 
     public void run() {
         byte[] buf = new byte[256];
-
-        while (true) {
+        boolean end = false;
+        while (!end) {
             try {
                 DatagramPacket packet = new DatagramPacket(buf, buf.length);
                 multCast_socket.receive(packet);
                 String received = new String(
                         packet.getData(), 0, packet.getLength());
-                if ("end".equals(received)) {
-                    System.out.println("Received");
-                    break;
-                }
+
+                System.out.println(received);
             } catch (IOException e) {
                 e.printStackTrace();
             }
