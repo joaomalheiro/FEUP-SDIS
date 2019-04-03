@@ -29,13 +29,19 @@ public class MessageController implements Runnable {
 	}
 
 	private void handlePutchunk() {
-		System.out.println(new String(packet.getData()));
+		int fileId = Integer.parseInt(header[2]);
+		int chunkNumber = Integer.parseInt(header[3]);
+		int replicationDeg = Integer.parseInt(header[4]);
+		Chunk chunk = new Chunk(fileId,chunkNumber,replicationDeg,packet.getData());
+
+
+
 		
 	}
 
 	private String[] parsePacketHeader() {
 		
-		byte[] buffer = new byte[1024]; 
+		byte[] buffer;
 		buffer = packet.getData();
 		String headerString =new String(buffer, 0, packet.getLength());
 		

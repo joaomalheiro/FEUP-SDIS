@@ -8,6 +8,7 @@ public class Peer {
     private static String peerAcessPoint;
     private static String protocolVersion;
     private static  MultiCast MC;
+    private static Storage storage;
 
     public static void main(String args[]) throws IOException {
 
@@ -15,7 +16,7 @@ public class Peer {
         initAtributes(args);
 
         //    while(true) {
-            	Message teste = new Message("1.0", 3, 4, 5, 6, "DURIOLA");
+            	Message teste = new Message("1.0", 2, 4, 5, 6, "DURIOLA");
             	String msg = teste.createPutChunk();
                 MC.sendMsg(msg.getBytes());
           //  }
