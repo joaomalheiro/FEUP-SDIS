@@ -25,20 +25,21 @@ public class MessageController implements Runnable {
 		}
 		
 		switch(type) {
-		case "PUTCHUNK":
-			handlePutchunk();
-			break;
+			case "PUTCHUNK":
+				handlePutChunk();
+				break;
+			case "GETCHUNK":
+				handleGetChunk();
+				break;
+
 		}
 		
 	}
 
-	private void handlePutchunk() {
+	private void handlePutChunk() {
 		int fileId = Integer.parseInt(header[3]);
-		System.out.print(fileId);
 		int chunkNumber = Integer.parseInt(header[4]);
-		System.out.print(chunkNumber);
 		int replicationDeg = Integer.parseInt(header[5]);
-		System.out.print(replicationDeg);
 
 		Chunk chunk = new Chunk(fileId,chunkNumber,replicationDeg, packet.getData());
 
@@ -57,8 +58,23 @@ public class MessageController implements Runnable {
 			e.printStackTrace();
 		}
 
+		sendStored(fileId, chunkNumber, replicationDeg);
+
 	}
 
+	private void handleGetChunk(){
+
+
+	}
+
+	private void sendStored(int fileId, int chunkNumber, int replicationDeg){
+
+		Message responseMsg = new Message("1.0", Integer.parseInt(Peer.getPeerId()), fileId, chunkNumber, replicationDeg);
+		byte[] response = responseMsg.createStored();
+
+		Peer.getMC().sendMsg(response);
+
+	}
 	private static void saveChunk(Chunk chunk, int fileId){
 		try {
 			FileOutputStream fileOut = new FileOutputStream("./peerDisk/peer" + Peer.getPeerId() + "/backup/fileId" + fileId  + "/chk" + chunk.getChunkNumber() );

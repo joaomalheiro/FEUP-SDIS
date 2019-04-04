@@ -12,13 +12,21 @@ public class Message {
 
 	public static String messageEnd = " " + (char) 0xD + (char) 0xA + " " + (char) 0xD + (char) 0xA;
 
-			Message(String version, int senderId, int fileId, int chunkNumber, int replicationDeg, byte[] body){
+	Message(String version, int senderId, int fileId, int chunkNumber, int replicationDeg, byte[] body){
 		this.version = version;
 		this.senderId = senderId;
 		this.fileId = fileId;
 		this.chunkNumber = chunkNumber;
 		this.replicationDeg = replicationDeg;
 		this.body = body;
+	}
+
+	Message(String version, int senderId, int fileId, int chunkNumber, int replicationDeg){
+		this.version = version;
+		this.senderId = senderId;
+		this.fileId = fileId;
+		this.chunkNumber = chunkNumber;
+		this.replicationDeg = replicationDeg;
 	}
 	
 	public byte[] createPutChunk() {

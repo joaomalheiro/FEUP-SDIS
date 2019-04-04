@@ -52,6 +52,8 @@ public class Peer {
 
     }
 
+    public static MultiCast getMC() { return MC;}
+
 	public static String getPeerId() {
 		return peerId;
 	}
