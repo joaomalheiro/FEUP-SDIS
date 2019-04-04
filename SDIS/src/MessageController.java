@@ -1,7 +1,4 @@
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.net.DatagramPacket;
 
 public class MessageController implements Runnable {
@@ -49,13 +46,22 @@ public class MessageController implements Runnable {
 		new File("./" + fileIdDir).mkdirs();
 
 		saveChunk(chunk, fileId);
-		
+
+		try {
+			Chunk test = loadChunk(fileId, 5);
+			System.out.print(test.getFileId());
+			System.out.print(test.getChunkNumber());
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+
 	}
 
 	private static void saveChunk(Chunk chunk, int fileId){
 		try {
-			FileOutputStream fileOut =
-					new FileOutputStream("./peerDisk/peer" + Peer.getPeerId() + "/backup/fileId" + fileId  + "/chk" + chunk.getChunkNumber() );
+			FileOutputStream fileOut = new FileOutputStream("./peerDisk/peer" + Peer.getPeerId() + "/backup/fileId" + fileId  + "/chk" + chunk.getChunkNumber() );
 			ObjectOutputStream out = new ObjectOutputStream(fileOut);
 			out.writeObject(chunk);
 			out.close();
@@ -63,6 +69,16 @@ public class MessageController implements Runnable {
 		} catch (IOException i) {
 			i.printStackTrace();
 		}
+	}
+
+	public static Chunk loadChunk(int fileId, int chunkNumber) throws IOException, ClassNotFoundException {
+		Chunk chunk = null;
+		FileInputStream fileIn = new FileInputStream("./peerDisk/peer" + Peer.getPeerId() + "/backup/fileId" + fileId  + "/chk" + chunkNumber);
+		ObjectInputStream in = new ObjectInputStream(fileIn);
+		chunk = (Chunk) in.readObject();
+		in.close();
+		fileIn.close();
+		return chunk;
 	}
 
 	private String[] parsePacketHeader() {
