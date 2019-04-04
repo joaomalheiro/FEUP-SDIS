@@ -13,6 +13,9 @@ public class MessageController implements Runnable {
 		header = parsePacketHeader();
 		
 		String type = header[0];
+		System.out.println(header[0]);
+		System.out.println(header[1]);
+		System.out.println(header[2]);
 	
 		//If message comes from the same peer
 		if(header[2].equals(Peer.getPeerId())) {

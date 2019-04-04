@@ -16,9 +16,10 @@ public class Peer {
         initAtributes(args);
 
         //    while(true) {
-            	Message teste = new Message("1.0", 2, 4, 5, 6, "DURIOLA");
-            	String msg = teste.createPutChunk();
-                MC.sendMsg(msg.getBytes());
+        byte[] duriola = { (byte)0xe0, 0x4f };
+            	Message teste = new Message("1.0", 3, 4, 5, 6,duriola );
+            	byte[] msg = teste.createPutChunk();
+                MC.sendMsg(msg);
           //  }
 
 
