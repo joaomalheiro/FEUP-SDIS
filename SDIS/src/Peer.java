@@ -22,7 +22,7 @@ public class Peer {
 
         //    while(true) {
                 byte[] duriola = { (byte)0xe0, 0x4f };
-            	Message teste = new Message("1.0", Integer.parseInt(peerId), 4, 5, 6, duriola );
+            	Message teste = new Message("1.0", Integer.parseInt(peerId), 4, 6, 6, duriola );
             	byte[] msg = teste.createPutChunk();
                 MC.sendMsg(msg);
           //  }

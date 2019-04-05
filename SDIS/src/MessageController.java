@@ -14,9 +14,6 @@ public class MessageController implements Runnable {
 		header = parsePacketHeader();
 
 		String type = header[0];
-		System.out.println(header[0]);
-		System.out.println(header[1]);
-		System.out.println(header[2]);
 	
 		//If message comes from the same peer
 		if(header[2].equals(Peer.getPeerId())) {
@@ -26,12 +23,22 @@ public class MessageController implements Runnable {
 		
 		switch(type) {
 			case "PUTCHUNK":
+				System.out.println("PUTCHUNK");
 				handlePutChunk();
 				break;
+			case "STORED":
+				System.out.println("STORED");
+				break;
 			case "GETCHUNK":
+				System.out.println("GETCHUNK");
 				handleGetChunk();
 				break;
-
+			case "CHUNK":
+				System.out.println("CHUNK");
+				handleChunk();
+				break;
+			default:
+				break;
 		}
 		
 	}
@@ -48,23 +55,47 @@ public class MessageController implements Runnable {
 
 		saveChunk(chunk, fileId);
 
+		sendStored(fileId, chunkNumber, replicationDeg);
+	}
+
+	private void handleGetChunk(){
+		int fileId = Integer.parseInt(header[3]);
+		int chunkNumber = Integer.parseInt(header[4]);
+
 		try {
-			Chunk test = loadChunk(fileId, 5);
-			System.out.print(test.getFileId());
-			System.out.print(test.getChunkNumber());
+			Chunk chunk = loadChunk(fileId, chunkNumber);
+			sendChunk(chunk);
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
+	}
 
-		sendStored(fileId, chunkNumber, replicationDeg);
+	private void handleChunk() {
+		int fileId = Integer.parseInt(header[3]);
+		int chunkNumber = Integer.parseInt(header[4]);
+		byte[] data = header[5].getBytes();
+
+		System.out.println(fileId);
+		System.out.println(chunkNumber);
+		System.out.println(data);
 
 	}
 
-	private void handleGetChunk(){
+	private void sendChunk(Chunk chunk){
+		Message responseMsg = new Message("1.0", Integer.parseInt(Peer.getPeerId()), chunk.getFileId(), chunk.getChunkNumber(), chunk.getData());
+		byte[] response = responseMsg.createChunk();
 
-
+		try {
+			System.out.println("Beginning time");
+			Thread.sleep((long)(Math.random() * 400));
+			System.out.println("End time");
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
+		Peer.getMC().sendMsg(response);
 	}
 
 	private void sendStored(int fileId, int chunkNumber, int replicationDeg){
@@ -72,9 +103,17 @@ public class MessageController implements Runnable {
 		Message responseMsg = new Message("1.0", Integer.parseInt(Peer.getPeerId()), fileId, chunkNumber, replicationDeg);
 		byte[] response = responseMsg.createStored();
 
+		try {
+			System.out.println("Beginning time");
+			Thread.sleep((long)(Math.random() * 400));
+			System.out.println("End time");
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 		Peer.getMC().sendMsg(response);
 
 	}
+
 	private static void saveChunk(Chunk chunk, int fileId){
 		try {
 			FileOutputStream fileOut = new FileOutputStream("./peerDisk/peer" + Peer.getPeerId() + "/backup/fileId" + fileId  + "/chk" + chunk.getChunkNumber() );

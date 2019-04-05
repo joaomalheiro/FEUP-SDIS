@@ -28,6 +28,14 @@ public class Message {
 		this.chunkNumber = chunkNumber;
 		this.replicationDeg = replicationDeg;
 	}
+
+	Message(String version, int senderId, int fileId, int chunkNumber, byte[] body){
+		this.version = version;
+		this.senderId = senderId;
+		this.fileId = fileId;
+		this.chunkNumber = chunkNumber;
+		this.body = body;
+	}
 	
 	public byte[] createPutChunk() {
 		String header = "PUTCHUNK" + " " + this.version + " " + this.senderId + " " + this.fileId + " " + this.chunkNumber + " " + this.replicationDeg + messageEnd;
