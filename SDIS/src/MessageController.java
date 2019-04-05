@@ -95,7 +95,7 @@ public class MessageController implements Runnable {
 			e.printStackTrace();
 		}
 		
-		Peer.getMC().sendMsg(response);
+		Peer.getMDR().sendMsg(response);
 	}
 
 	private void sendStored(int fileId, int chunkNumber, int replicationDeg){

@@ -37,7 +37,7 @@ public class Message {
 		this.body = body;
 	}
 	
-	public byte[] createPutChunk() {
+	public void createPutChunk() {
 		String header = "PUTCHUNK" + " " + this.version + " " + this.senderId + " " + this.fileId + " " + this.chunkNumber + " " + this.replicationDeg + messageEnd;
 		ByteArrayOutputStream outputMessageStream = new ByteArrayOutputStream();
 
@@ -47,8 +47,7 @@ public class Message {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
-		return outputMessageStream.toByteArray();
+		Peer.getMDB().sendMsg(outputMessageStream.toByteArray());
 	}
 	
 	public byte[] createStored() {
@@ -58,11 +57,11 @@ public class Message {
 		return header.getBytes();
 	}
 	
-	public byte[] createGetChunk() {
+	public void createGetChunk() {
 
 		String header = "GETCHUNK" + " " + this.version + " " + this.senderId + " " + this.fileId + " " + this.chunkNumber + messageEnd;
 
-		return header.getBytes();
+		Peer.getMC().sendMsg(header.getBytes());
 	}
 	
 	public byte[] createChunk() {
