@@ -79,11 +79,11 @@ public class Message {
 		return outputMessageStream.toByteArray();
 	}
 	
-	public byte[] createDelete() {
+	public void createDelete() {
 
 		String header = "DELETE" + " " + this.version + " " + this.senderId + " " + this.fileId + messageEnd;
 
-		return header.getBytes();
+		Peer.getMC().sendMsg(header.getBytes());
  	}
 	
 	public byte[] createRemoved() {

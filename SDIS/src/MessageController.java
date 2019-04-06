@@ -1,5 +1,6 @@
 import java.io.*;
 import java.net.DatagramPacket;
+import java.nio.file.Path;
 
 public class MessageController implements Runnable {
 	private DatagramPacket packet;
@@ -36,13 +37,79 @@ public class MessageController implements Runnable {
 				System.out.println("CHUNK");
 				handleChunk();
 				break;
+            case "DELETE":
+                handleDelete();
 			default:
 				break;
 		}
 		
 	}
 
-	private void handleStored() {
+    private void handleDelete() {
+
+        int fileId = Integer.parseInt(header[3]);
+
+        File directory = new File("./peerDisk/peer" + Peer.getPeerId() + "/backup/fileId" + fileId);
+
+        if(!directory.exists()){
+
+            System.out.println("Directory does not exist.");
+            System.exit(0);
+
+        }else{
+
+            try{
+
+                delete(directory);
+
+            }catch(IOException e){
+                e.printStackTrace();
+                System.exit(0);
+            }
+        }
+
+
+    }
+
+    private void delete(File file) throws IOException{
+        if(file.isDirectory()){
+
+            //directory is empty, then delete it
+            if(file.list().length==0){
+
+                file.delete();
+                System.out.println("Directory is deleted : "
+                        + file.getAbsolutePath());
+
+            }else{
+
+                //list all the directory contents
+                String files[] = file.list();
+
+                for (String temp : files) {
+                    //construct the file structure
+                    File fileDelete = new File(file, temp);
+
+                    //recursive delete
+                    delete(fileDelete);
+                }
+
+                //check the directory again, if empty then delete it
+                if(file.list().length==0){
+                    file.delete();
+                    System.out.println("Directory is deleted : "
+                            + file.getAbsolutePath());
+                }
+            }
+
+        }else{
+            //if file, then delete it
+            file.delete();
+            System.out.println("File is deleted : " + file.getAbsolutePath());
+        }
+    }
+
+    private void handleStored() {
 		String version = header[1];
 		int senderId = Integer.parseInt(header[2]);
 		int fileId = Integer.parseInt(header[3]);

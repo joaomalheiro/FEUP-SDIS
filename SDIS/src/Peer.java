@@ -33,9 +33,12 @@ public class Peer {
                     byte[] duriola = {(byte) 0xe0, 0x4f};
                     Message teste = new Message("1.0", Integer.parseInt(peerId), 4, 6, 6, duriola);
                     teste.createPutChunk();
-                } else {
+                } else if (option == 2){
                     Message teste = new Message("1.0", Integer.parseInt(peerId), 4, 6, 6, null);
                     teste.createGetChunk();
+                } else {
+                    Message teste = new Message("1.0", Integer.parseInt(peerId), 4, 6, 6, null);
+                    teste.createDelete();
                 }
             }
 
