@@ -20,13 +20,12 @@ public class FileHandler {
             msg.createPutChunk();
             i++;
 
-            /*
+
             try {
                 Thread.sleep((long)1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            */
         }
     }
 

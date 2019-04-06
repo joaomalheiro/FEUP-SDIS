@@ -37,7 +37,7 @@ public class Message {
 		this.body = body;
 	}
 	
-	public synchronized void createPutChunk() {
+	public void createPutChunk() {
 		System.out.println(this.chunkNumber);
 		String header = "PUTCHUNK" + " " + this.version + " " + this.senderId + " " + this.fileId + " " + this.chunkNumber + " " + this.replicationDeg + messageEnd;
 		ByteArrayOutputStream outputMessageStream = new ByteArrayOutputStream();
