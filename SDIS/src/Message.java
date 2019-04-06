@@ -37,16 +37,19 @@ public class Message {
 		this.body = body;
 	}
 	
-	public void createPutChunk() {
+	public synchronized void createPutChunk() {
+		System.out.println(this.chunkNumber);
 		String header = "PUTCHUNK" + " " + this.version + " " + this.senderId + " " + this.fileId + " " + this.chunkNumber + " " + this.replicationDeg + messageEnd;
 		ByteArrayOutputStream outputMessageStream = new ByteArrayOutputStream();
 
 		try {
 			outputMessageStream.write(header.getBytes());
+			if(this.body != null)
 			outputMessageStream.write(this.body);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+
 		Peer.getMDB().sendMsg(outputMessageStream.toByteArray());
 	}
 	

@@ -30,16 +30,12 @@ public class Peer {
                 int option = myObj.nextInt();
 
                 if(option == 1) {
-                    byte[] duriola = {(byte) 0xe0, 0x4f};
-                    Message teste = new Message("1.0", Integer.parseInt(peerId), 4, 6, 6, duriola);
-                    teste.createPutChunk();
+                    FileHandler.splitFile(new File("./testFiles/test.txt"));
                 } else {
                     Message teste = new Message("1.0", Integer.parseInt(peerId), 4, 6, 6, null);
                     teste.createGetChunk();
                 }
             }
-
-
     }
 
     private static void initAtributes(String[] args) throws IOException {

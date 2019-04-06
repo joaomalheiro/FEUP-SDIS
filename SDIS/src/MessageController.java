@@ -57,6 +57,10 @@ public class MessageController implements Runnable {
 		int chunkNumber = Integer.parseInt(header[4]);
 		int replicationDeg = Integer.parseInt(header[5]);
 
+		System.out.println(fileId);
+		System.out.println(chunkNumber);
+		System.out.println(replicationDeg);
+
 		Chunk chunk = new Chunk(fileId,chunkNumber,replicationDeg, packet.getData());
 
 		String fileIdDir = "peerDisk/peer" + Peer.getPeerId() + "/backup/" + "fileId" + fileId ;

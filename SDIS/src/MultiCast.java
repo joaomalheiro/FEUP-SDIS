@@ -18,7 +18,7 @@ public class MultiCast implements Runnable{
     }
 
     public void run() {
-        byte[] buf = new byte[256];
+        byte[] buf = new byte[65000];
         boolean end = false;
         while (!end) {
             try {
@@ -30,14 +30,13 @@ public class MultiCast implements Runnable{
                 e.printStackTrace();
             }
         }
-
         multCast_socket.close();
     }
 
     public void sendMsg(byte[] msg){
 
-        DatagramPacket packet = new DatagramPacket(msg, msg.length, multCast_address, multCast_port);
 
+        DatagramPacket packet = new DatagramPacket(msg, msg.length, multCast_address, multCast_port);
         try {
             multCast_socket.send(packet);
         } catch (IOException e) {
