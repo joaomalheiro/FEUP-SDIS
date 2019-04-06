@@ -27,10 +27,9 @@ public class MessageController implements Runnable {
 				handlePutChunk();
 				break;
 			case "STORED":
-				System.out.println("STORED");
+				handleStored();
 				break;
 			case "GETCHUNK":
-				System.out.println("GETCHUNK");
 				handleGetChunk();
 				break;
 			case "CHUNK":
@@ -41,6 +40,16 @@ public class MessageController implements Runnable {
 				break;
 		}
 		
+	}
+
+	private void handleStored() {
+		String version = header[1];
+		int senderId = Integer.parseInt(header[2]);
+		int fileId = Integer.parseInt(header[3]);
+		int chunkNumber = Integer.parseInt(header[4]);
+
+		System.out.println("STORED " + version + " " + senderId + " " + fileId + " " + chunkNumber);
+
 	}
 
 	private void handlePutChunk() {
@@ -63,13 +72,14 @@ public class MessageController implements Runnable {
 		int chunkNumber = Integer.parseInt(header[4]);
 
 		try {
-			Chunk chunk = loadChunk(fileId, chunkNumber);
+            Chunk chunk = loadChunk(fileId, chunkNumber);
 			sendChunk(chunk);
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
+
 	}
 
 	private void handleChunk() {
