@@ -77,11 +77,11 @@ public class Message {
 		Peer.getMC().sendMsg(header.getBytes());
  	}
 	
-	public byte[] createRemoved() {
+	public void createRemoved() {
 
 		String header = "REMOVED" + " " + this.version + " " + this.senderId + " " + this.fileId + " " + this.chunkNumber + messageEnd;
 
-		return header.getBytes();
+		Peer.getMC().sendMsg(header.getBytes());
 	}
 	
 	

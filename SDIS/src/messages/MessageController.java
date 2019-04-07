@@ -29,9 +29,13 @@ public class MessageController implements Runnable {
 		
 		switch(type) {
 			case "PUTCHUNK":
-				System.out.println("PUTCHUNK");
-				handlePutChunk();
-				System.out.println(Peer.getStorage().getSpaceOcupied() + " Space Ocupied");
+			    if(Peer.getStorage().allowChunk(packet.getData())){
+                    System.out.println("PUTCHUNK");
+                    handlePutChunk();
+                } else {
+			        System.out.println("Not enough space");
+                }
+
 				break;
 			case "STORED":
 				handleStored();
@@ -45,11 +49,17 @@ public class MessageController implements Runnable {
 				break;
             case "DELETE":
                 handleDelete();
+            case "REMOVED":
+                handleRemoved();
 			default:
 				break;
 		}
 		
 	}
+
+    private void handleRemoved() {
+	    System.out.println(header[0] + " " + header[1] + " " + header[2] + " " + header[3]);
+    }
 
     private void handleDelete() {
 

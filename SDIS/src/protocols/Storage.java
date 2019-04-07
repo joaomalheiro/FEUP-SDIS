@@ -1,6 +1,7 @@
 package protocols;
 
 
+import messages.Message;
 import peer.Peer;
 
 import java.io.File;
@@ -12,6 +13,9 @@ public class Storage {
     public Storage(long spaceReserved){
         this.spaceReserved = spaceReserved;
         updateSpaceOcupied();
+        if(this.spaceReserved < this.spaceOcupied){
+            clearStorageSpace();
+        }
     }
 
     public void updateSpaceOcupied(){
@@ -36,13 +40,93 @@ public class Storage {
         return length;
     }
 
+    public boolean allowChunk(byte[] chunkData){
+        updateSpaceOcupied();
+        return spaceOcupied + (chunkData.length / 1024) < spaceReserved;
+    }
     public long getSpaceReserved() {
         return spaceReserved;
     }
 
     public void setSpaceReserved(long spaceReserved) {
         this.spaceReserved = spaceReserved;
+        if(this.spaceReserved < this.spaceOcupied){
+            clearStorageSpace();
+        }
     }
+
+    private void clearStorageSpace() {
+        File peerFolder = new File("./peerDisk/peer" + Peer.getPeerId());
+
+            try {
+                for (File file : peerFolder.listFiles()) {
+                    deleteFile(file);
+                }
+            }
+            catch (NullPointerException e) {
+
+            }
+    }
+
+    private void deleteFile(File file) {
+        if(file.isDirectory()){
+
+            //directory is empty, then delete it
+            if(file.list().length==0){
+
+                file.delete();
+                System.out.println("Directory is deleted : "
+                        + file.getAbsolutePath());
+
+            }else{
+
+                //list all the directory contents
+                String files[] = file.list();
+
+                for (String temp : files) {
+                    //construct the file structure
+                    File fileDelete = new File(file, temp);
+                    if(this.spaceReserved < this.spaceOcupied){
+                        //recursive delete
+                        deleteFile(fileDelete);
+                    }
+                }
+
+                //check the directory again, if empty then delete it
+                if(file.list().length==0){
+                    file.delete();
+                    System.out.println("Directory is deleted : "
+                            + file.getAbsolutePath());
+                }
+            }
+
+        }else{
+            if(this.spaceReserved < this.spaceOcupied) {
+                handleDeleteFile(file.getAbsolutePath());
+                //if file, then delete it
+                file.delete();
+                System.out.println("File is deleted : " + file.getAbsolutePath());
+                updateSpaceOcupied();
+            }
+        }
+    }
+
+    private void handleDeleteFile(String absolutePath) {
+        int fileId;
+        int chunkNumber;
+
+        String[] path = absolutePath.split("\\\\");
+        if(path[path.length - 1].contains("chk")){
+            fileId = Integer.parseInt(path[path.length - 1].replace("chk",""));
+            chunkNumber = Integer.parseInt(path[path.length - 2].replace("fileId",""));
+            System.out.println(fileId + " " + chunkNumber);
+            Message deleteMsg = new Message("1.0", Integer.parseInt(Peer.getPeerId()), fileId, chunkNumber, 0, null);
+            deleteMsg.createRemoved();
+
+        }
+
+    }
+
 
     public long getSpaceOcupied() {
         updateSpaceOcupied();
