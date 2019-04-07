@@ -31,6 +31,7 @@ public class MessageController implements Runnable {
 			case "PUTCHUNK":
 				System.out.println("PUTCHUNK");
 				handlePutChunk();
+				System.out.println(Peer.getStorage().getSpaceOcupied() + " Space Ocupied");
 				break;
 			case "STORED":
 				handleStored();
