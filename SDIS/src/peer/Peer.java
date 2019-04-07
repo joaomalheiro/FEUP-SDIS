@@ -54,9 +54,13 @@ public class Peer  implements RMIStub {
 
                 if(option == 1) {
                     FileHandler.splitFile(new File("./testFiles/test.txt"));
-                } else {
+                } else if (option == 2) {
                     Message teste = new Message("1.0", Integer.parseInt(peerId), 4, 6, 6, null);
                     teste.createGetChunk();
+                }   else {
+                    Message teste = new Message("1.0", Integer.parseInt(peerId), 4, 6, 6, null);
+                    teste.createDelete();
+
                 }
             }
     }

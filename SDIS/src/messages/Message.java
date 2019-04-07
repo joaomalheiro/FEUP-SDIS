@@ -24,22 +24,6 @@ public class Message {
 		this.replicationDeg = replicationDeg;
 		this.body = body;
 	}
-
-	Message(String version, int senderId, int fileId, int chunkNumber, int replicationDeg){
-		this.version = version;
-		this.senderId = senderId;
-		this.fileId = fileId;
-		this.chunkNumber = chunkNumber;
-		this.replicationDeg = replicationDeg;
-	}
-
-	Message(String version, int senderId, int fileId, int chunkNumber, byte[] body){
-		this.version = version;
-		this.senderId = senderId;
-		this.fileId = fileId;
-		this.chunkNumber = chunkNumber;
-		this.body = body;
-	}
 	
 	public void createPutChunk() {
 		System.out.println(this.chunkNumber);

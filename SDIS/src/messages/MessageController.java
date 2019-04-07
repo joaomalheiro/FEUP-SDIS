@@ -170,7 +170,7 @@ public class MessageController implements Runnable {
 	}
 
 	private void sendChunk(Chunk chunk){
-		Message responseMsg = new Message("1.0", Integer.parseInt(Peer.getPeerId()), chunk.getFileId(), chunk.getChunkNumber(), chunk.getData());
+		Message responseMsg = new Message("1.0", Integer.parseInt(Peer.getPeerId()), chunk.getFileId(), chunk.getChunkNumber(), 0,chunk.getData());
 		byte[] response = responseMsg.createChunk();
 
 		try {
@@ -184,7 +184,7 @@ public class MessageController implements Runnable {
 
 	private void sendStored(int fileId, int chunkNumber, int replicationDeg){
 
-		Message responseMsg = new Message("1.0", Integer.parseInt(Peer.getPeerId()), fileId, chunkNumber, replicationDeg);
+		Message responseMsg = new Message("1.0", Integer.parseInt(Peer.getPeerId()), fileId, chunkNumber, replicationDeg, null);
 		byte[] response = responseMsg.createStored();
 
 		try {
