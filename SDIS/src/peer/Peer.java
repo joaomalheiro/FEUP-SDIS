@@ -1,18 +1,26 @@
+package peer;
+
+import channel.MultiCast;
+import files.FileHandler;
+import messages.Message;
+import protocols.Backup;
+
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectOutputStream;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.Scanner;
 
-public class Peer {
+public class Peer  implements RMIStub {
 
     private static int serverId;
     private static String peerId;
     private static String peerAcessPoint;
     private static String protocolVersion;
-    private static  MultiCast MC;
-    private static  MultiCast MDB;
-    private static  MultiCast MDR;
+    private static MultiCast MC;
+    private static MultiCast MDB;
+    private static MultiCast MDR;
 
     //1 2 1 230.0.0.0 4446 225.0.0.0 5000 225.0.0.0 4450
 
@@ -22,6 +30,21 @@ public class Peer {
         initAtributes(args);
 
         createDir();
+
+        RMIStub stub = null;
+
+        //RUN IN TERMINAL rmiregistry &
+        try {
+            Peer peer = new Peer();
+            stub = (RMIStub) UnicastRemoteObject.exportObject(peer, 0);
+
+            Registry reg = LocateRegistry.getRegistry();
+            reg.rebind(Peer.getPeerId(), stub);
+
+            System.out.println("Peer connected");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
             while(true) {
                 Scanner myObj = new Scanner(System.in);
@@ -77,5 +100,21 @@ public class Peer {
 
     public static MultiCast getMDB() {
         return MDB;
+    }
+
+    @Override
+    public void backupProtocol(String file, int replicationDeg) {
+        Backup backup = new Backup(file, replicationDeg);
+        backup.run();
+    }
+
+    @Override
+    public void restoreProtocol(String file) {
+
+    }
+
+    @Override
+    public void deleteProtocol(String file) {
+
     }
 }

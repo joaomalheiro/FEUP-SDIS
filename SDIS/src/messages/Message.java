@@ -1,3 +1,7 @@
+package messages;
+
+import peer.Peer;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
@@ -12,7 +16,7 @@ public class Message {
 
 	public static String messageEnd = " " + (char) 0xD + (char) 0xA + " " + (char) 0xD + (char) 0xA;
 
-	Message(String version, int senderId, int fileId, int chunkNumber, int replicationDeg, byte[] body){
+	public Message(String version, int senderId, int fileId, int chunkNumber, int replicationDeg, byte[] body){
 		this.version = version;
 		this.senderId = senderId;
 		this.fileId = fileId;

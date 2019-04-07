@@ -1,6 +1,11 @@
+package messages;
+
+import messages.Message;
+import peer.Peer;
+import protocols.Chunk;
+
 import java.io.*;
 import java.net.DatagramPacket;
-import java.nio.file.Path;
 
 public class MessageController implements Runnable {
 	private DatagramPacket packet;
@@ -169,9 +174,7 @@ public class MessageController implements Runnable {
 		byte[] response = responseMsg.createChunk();
 
 		try {
-			System.out.println("Beginning time");
 			Thread.sleep((long)(Math.random() * 400));
-			System.out.println("End time");
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -185,9 +188,7 @@ public class MessageController implements Runnable {
 		byte[] response = responseMsg.createStored();
 
 		try {
-			System.out.println("Beginning time");
 			Thread.sleep((long)(Math.random() * 400));
-			System.out.println("End time");
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}

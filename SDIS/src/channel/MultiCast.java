@@ -1,3 +1,7 @@
+package channel;
+
+import messages.MessageController;
+
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
@@ -8,7 +12,7 @@ public class MultiCast implements Runnable{
     public InetAddress multCast_address;
     public int multCast_port;
 
-    MultiCast(String address, String port) throws IOException {
+    public MultiCast(String address, String port) throws IOException {
         this.multCast_address = InetAddress.getByName(address);
         this.multCast_port = Integer.parseInt(port);
 

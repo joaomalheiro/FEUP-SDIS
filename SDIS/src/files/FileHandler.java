@@ -1,3 +1,8 @@
+package files;
+
+import messages.Message;
+import peer.Peer;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;

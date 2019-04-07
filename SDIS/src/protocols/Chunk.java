@@ -1,3 +1,5 @@
+package protocols;
+
 import java.io.Serializable;
 
 public class Chunk implements Serializable {
