@@ -14,6 +14,9 @@ public class FileHandler {
 
         byte[] data = new byte[1000 * 64];
 
+        System.out.println("File:");
+        System.out.println(file.getName());
+
         FileInputStream stream = new FileInputStream(file);
         int i = 0;
         int length;
@@ -21,7 +24,7 @@ public class FileHandler {
         while((length =stream.read(data)) > 0) {
 
             data = Arrays.copyOf(data,length);
-            Message msg = new Message("1.0", Integer.parseInt(Peer.getPeerId()), 4, i, 6, data);
+            Message msg = new Message("1.0", Integer.parseInt(Peer.getPeerId()), "3", i, 6, data);
             msg.createPutChunk();
             i++;
 

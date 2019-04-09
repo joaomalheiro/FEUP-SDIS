@@ -4,25 +4,51 @@ import peer.Peer;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 public class Message {
 	
 	private String version;
 	private int senderId;
-	private int fileId;
+	private String fileId;
 	private int chunkNumber;
 	private int replicationDeg;
 	private byte[] body;
 
 	public static String messageEnd = " " + (char) 0xD + (char) 0xA + " " + (char) 0xD + (char) 0xA;
 
-	public Message(String version, int senderId, int fileId, int chunkNumber, int replicationDeg, byte[] body){
+	public Message(String version, int senderId, String fileId, int chunkNumber, int replicationDeg, byte[] body){
 		this.version = version;
 		this.senderId = senderId;
-		this.fileId = fileId;
+		this.fileId = encrypt(fileId);
 		this.chunkNumber = chunkNumber;
 		this.replicationDeg = replicationDeg;
 		this.body = body;
+	}
+
+	private String encrypt(String text) {
+
+		MessageDigest digest = null;
+		try {
+			digest = MessageDigest.getInstance("SHA-256");
+			byte[] encodedhash = digest.digest(text.getBytes(StandardCharsets.UTF_8));
+			return bytesToHex(encodedhash);
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		}
+		return "error in hashing";
+	}
+
+	private String bytesToHex(byte[] hash) {
+		StringBuffer hexString = new StringBuffer();
+		for (int i = 0; i < hash.length; i++) {
+			String hex = Integer.toHexString(0xff & hash[i]);
+			if(hex.length() == 1) hexString.append('0');
+			hexString.append(hex);
+		}
+		return hexString.toString();
 	}
 	
 	public void createPutChunk() {

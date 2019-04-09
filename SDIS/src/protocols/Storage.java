@@ -112,12 +112,12 @@ public class Storage {
     }
 
     private void handleDeleteFile(String absolutePath) {
-        int fileId;
+        String fileId;
         int chunkNumber;
 
         String[] path = absolutePath.split("\\\\");
         if(path[path.length - 1].contains("chk")){
-            fileId = Integer.parseInt(path[path.length - 1].replace("chk",""));
+            fileId = path[path.length - 1].replace("chk","");
             chunkNumber = Integer.parseInt(path[path.length - 2].replace("fileId",""));
             System.out.println(fileId + " " + chunkNumber);
             Message deleteMsg = new Message("1.0", Integer.parseInt(Peer.getPeerId()), fileId, chunkNumber, 0, null);

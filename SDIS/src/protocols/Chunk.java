@@ -7,12 +7,12 @@ public class Chunk implements Serializable {
     public static final int SIZE_MAX = 64000;
 
     private byte[] data;
-    private int fileId;
+    private String fileId;
     private int chunkNumber;
     private int replicationDeg;
 
 
-    public Chunk(int fileId, int chunkNumber, int replicationDeg, byte[] data) {
+    public Chunk(String fileId, int chunkNumber, int replicationDeg, byte[] data) {
         this.data = data;
         this.fileId = fileId;
         this.chunkNumber = chunkNumber;
@@ -24,7 +24,7 @@ public class Chunk implements Serializable {
         return data;
     }
 
-    public int getFileId() {
+    public String getFileId() {
         return fileId;
     }
 

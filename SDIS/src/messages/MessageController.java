@@ -63,9 +63,9 @@ public class MessageController implements Runnable {
 
     private void handleDelete() {
 
-        int fileId = Integer.parseInt(header[3]);
+        String fileId = header[3];
 
-        File directory = new File("./peerDisk/peer" + Peer.getPeerId() + "/backup/fileId" + fileId);
+        File directory = new File("./peerDisk/peer" + Peer.getPeerId() + "/backup/" + fileId);
 
         if(!directory.exists()){
 
@@ -128,7 +128,7 @@ public class MessageController implements Runnable {
     private void handleStored() {
 		String version = header[1];
 		int senderId = Integer.parseInt(header[2]);
-		int fileId = Integer.parseInt(header[3]);
+		String fileId = header[3];
 		int chunkNumber = Integer.parseInt(header[4]);
 
 		System.out.println("STORED " + version + " " + senderId + " " + fileId + " " + chunkNumber);
@@ -136,7 +136,7 @@ public class MessageController implements Runnable {
 	}
 
 	private void handlePutChunk() {
-		int fileId = Integer.parseInt(header[3]);
+		String fileId = header[3];
 		int chunkNumber = Integer.parseInt(header[4]);
 		int replicationDeg = Integer.parseInt(header[5]);
 
@@ -146,7 +146,7 @@ public class MessageController implements Runnable {
 
 		Chunk chunk = new Chunk(fileId,chunkNumber,replicationDeg, packet.getData());
 
-		String fileIdDir = "peerDisk/peer" + Peer.getPeerId() + "/backup/" + "fileId" + fileId ;
+		String fileIdDir = "peerDisk/peer" + Peer.getPeerId() + "/backup/" + fileId;
 		new File("./" + fileIdDir).mkdirs();
 
 		saveChunk(chunk, fileId);
@@ -155,7 +155,7 @@ public class MessageController implements Runnable {
 	}
 
 	private void handleGetChunk(){
-		int fileId = Integer.parseInt(header[3]);
+		String fileId = header[3];
 		int chunkNumber = Integer.parseInt(header[4]);
 
 		try {
@@ -193,7 +193,7 @@ public class MessageController implements Runnable {
 		Peer.getMDR().sendMsg(response);
 	}
 
-	private void sendStored(int fileId, int chunkNumber, int replicationDeg){
+	private void sendStored(String fileId, int chunkNumber, int replicationDeg){
 
 		Message responseMsg = new Message("1.0", Integer.parseInt(Peer.getPeerId()), fileId, chunkNumber, replicationDeg, null);
 		byte[] response = responseMsg.createStored();
@@ -207,9 +207,9 @@ public class MessageController implements Runnable {
 
 	}
 
-	private static void saveChunk(Chunk chunk, int fileId){
+	private static void saveChunk(Chunk chunk, String fileId){
 		try {
-			FileOutputStream fileOut = new FileOutputStream("./peerDisk/peer" + Peer.getPeerId() + "/backup/fileId" + fileId  + "/chk" + chunk.getChunkNumber() );
+			FileOutputStream fileOut = new FileOutputStream("./peerDisk/peer" + Peer.getPeerId() + "/backup/" + fileId  + "/chk" + chunk.getChunkNumber() );
 			ObjectOutputStream out = new ObjectOutputStream(fileOut);
 			out.writeObject(chunk);
 			out.close();
@@ -219,9 +219,9 @@ public class MessageController implements Runnable {
 		}
 	}
 
-	public static Chunk loadChunk(int fileId, int chunkNumber) throws IOException, ClassNotFoundException {
+	public static Chunk loadChunk(String fileId, int chunkNumber) throws IOException, ClassNotFoundException {
 		Chunk chunk = null;
-		FileInputStream fileIn = new FileInputStream("./peerDisk/peer" + Peer.getPeerId() + "/backup/fileId" + fileId  + "/chk" + chunkNumber);
+		FileInputStream fileIn = new FileInputStream("./peerDisk/peer" + Peer.getPeerId() + "/backup/" + fileId  + "/chk" + chunkNumber);
 		ObjectInputStream in = new ObjectInputStream(fileIn);
 		chunk = (Chunk) in.readObject();
 		in.close();
