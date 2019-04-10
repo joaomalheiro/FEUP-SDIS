@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
 
 public class Message {
 	
@@ -51,15 +52,15 @@ public class Message {
 		return hexString.toString();
 	}
 	
-	public void createPutChunk() {
+	public synchronized void createPutChunk() {
 		System.out.println(this.chunkNumber);
-		String header = "PUTCHUNK" + " " + this.version + " " + this.senderId + " " + this.fileId + " " + this.chunkNumber + " " + this.replicationDeg + messageEnd;
+		String header = new String("PUTCHUNK" + " " + this.version + " " + this.senderId + " " + this.fileId + " " + this.chunkNumber + " " + this.replicationDeg + messageEnd);
 		ByteArrayOutputStream outputMessageStream = new ByteArrayOutputStream();
 
 		try {
-			outputMessageStream.write(header.getBytes());
+			outputMessageStream.write(Arrays.copyOf(header.getBytes(), header.length()));
 			if(this.body != null)
-			outputMessageStream.write(this.body);
+			outputMessageStream.write(Arrays.copyOf(this.body, this.body.length));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

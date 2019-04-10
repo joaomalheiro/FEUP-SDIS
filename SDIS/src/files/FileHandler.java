@@ -14,26 +14,23 @@ public class FileHandler {
 
         byte[] data = new byte[1000 * 64];
 
-        System.out.println("File:");
-        System.out.println(file.getName());
-
         FileInputStream stream = new FileInputStream(file);
         int i = 0;
         int length;
 
-        while((length =stream.read(data)) > 0) {
+        while((length = stream.read(data)) > 0) {
 
-            data = Arrays.copyOf(data,length);
-            Message msg = new Message("1.0", Integer.parseInt(Peer.getPeerId()), "3", i, 6, data);
+            Message msg = new Message("1.0", Integer.parseInt(Peer.getPeerId()), file.getName() + file.lastModified(), i, 6, Arrays.copyOf(data,length));
             msg.createPutChunk();
             i++;
 
-
+/*
             try {
                 Thread.sleep((long)1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+            */
         }
     }
 

@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
+import java.util.Arrays;
 
 public class MultiCast implements Runnable{
     public MulticastSocket multCast_socket;
@@ -39,8 +40,7 @@ public class MultiCast implements Runnable{
 
     public void sendMsg(byte[] msg){
 
-
-        DatagramPacket packet = new DatagramPacket(msg, msg.length, multCast_address, multCast_port);
+        DatagramPacket packet = new DatagramPacket(Arrays.copyOf(msg, msg.length), msg.length, multCast_address, multCast_port);
         try {
             multCast_socket.send(packet);
         } catch (IOException e) {
