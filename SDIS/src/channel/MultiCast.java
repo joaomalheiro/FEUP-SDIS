@@ -23,10 +23,11 @@ public class MultiCast implements Runnable{
     }
 
     public void run() {
-        byte[] buf = new byte[65000];
+        byte[] buf;
         boolean end = false;
         while (!end) {
             try {
+            	buf = new byte[65000];
                 DatagramPacket packet = new DatagramPacket(buf, buf.length);
                 multCast_socket.receive(packet);
                 MessageController msgControl = new MessageController(packet);

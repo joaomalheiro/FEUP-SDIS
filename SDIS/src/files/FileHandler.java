@@ -23,14 +23,6 @@ public class FileHandler {
             Message msg = new Message("1.0", Integer.parseInt(Peer.getPeerId()), file.getName() + file.lastModified(), i, 6, Arrays.copyOf(data,length));
             msg.createPutChunk();
             i++;
-
-/*
-            try {
-                Thread.sleep((long)1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            */
         }
     }
 
