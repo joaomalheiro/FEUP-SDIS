@@ -6,6 +6,7 @@ import protocols.Chunk;
 
 import java.io.*;
 import java.net.DatagramPacket;
+import java.util.Arrays;
 
 public class MessageController implements Runnable {
 	private DatagramPacket packet;
@@ -153,6 +154,19 @@ public class MessageController implements Runnable {
 
 		sendStored(fileId, chunkNumber, replicationDeg);
 	}
+	
+	/*private byte[] getDataFromPacket() {
+		
+		int headerLength = 3;
+		
+		for(int i = 0; i < header.length; i++){
+			headerLength += header[i].length();
+		}
+		
+		
+		return Arrays.copyOfRange(packet, headerLength, packet.getLength() );
+		
+	}*/
 
 	private void handleGetChunk(){
 		String fileId = header[3];
