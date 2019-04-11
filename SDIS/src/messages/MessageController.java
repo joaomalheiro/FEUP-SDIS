@@ -145,28 +145,41 @@ public class MessageController implements Runnable {
 		System.out.println(chunkNumber);
 		System.out.println(replicationDeg);
 
-		Chunk chunk = new Chunk(fileId,chunkNumber,replicationDeg, packet.getData());
+		Chunk chunk = new Chunk(fileId,chunkNumber,replicationDeg, getDataFromPacket());
 
 		String fileIdDir = "peerDisk/peer" + Peer.getPeerId() + "/backup/" + fileId;
 		new File("./" + fileIdDir).mkdirs();
 
 		saveChunk(chunk, fileId);
 
+		Chunk newChunk = null;
+		try {
+			newChunk = loadChunk(fileId,  chunkNumber);
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+
+		String s = new String(newChunk.getData());
+		System.out.println(s);
+
 		sendStored(fileId, chunkNumber, replicationDeg);
 	}
 	
-	/*private byte[] getDataFromPacket() {
+	private byte[] getDataFromPacket() {
 		
 		int headerLength = 3;
 		
 		for(int i = 0; i < header.length; i++){
 			headerLength += header[i].length();
+            if(header[i].equals("\r\n"))
+                break;
 		}
+
+		return Arrays.copyOfRange(packet.getData(), headerLength, packet.getLength() );
 		
-		
-		return Arrays.copyOfRange(packet, headerLength, packet.getLength() );
-		
-	}*/
+	}
 
 	private void handleGetChunk(){
 		String fileId = header[3];

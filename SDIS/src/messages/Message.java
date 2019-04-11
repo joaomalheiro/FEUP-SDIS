@@ -59,8 +59,9 @@ public class Message {
 
 		try {
 			outputMessageStream.write(Arrays.copyOf(header.getBytes(), header.length()));
-			if(this.body != null)
-			outputMessageStream.write(Arrays.copyOf(this.body, this.body.length));
+			if(this.body != null) {
+				outputMessageStream.write(Arrays.copyOf(this.body, this.body.length));
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
