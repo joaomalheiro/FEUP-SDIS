@@ -14,15 +14,7 @@ public class TestApp {
         String peerId = args[0];
         String protocol = args[1];
 
-        String operand1 = null, operand2 = null;
-
-        if(args[2] != null) {
-            operand1 = args[2];
-        }
-
-        if(args[3] != null) {
-            operand2 = args[3];
-        }
+        String operand1 = null, operand2;
 
         Registry registry = LocateRegistry.getRegistry("localhost");
         RMIStub stub = (RMIStub) registry.lookup(peerId);
@@ -31,9 +23,12 @@ public class TestApp {
 
         switch (protocol){
             case "BACKUP":
+                operand1 = args[2];
+                operand2 = args[3];
                 stub.backupProtocol(operand1, Integer.parseInt(operand2));
                 break;
             case "RESTORE":
+                operand1 = args[2];
                 stub.restoreProtocol(operand1);
                 break;
             case "DELETE":

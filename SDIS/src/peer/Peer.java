@@ -4,6 +4,7 @@ import channel.MultiCast;
 import files.FileHandler;
 import messages.Message;
 import protocols.Backup;
+import protocols.Restore;
 import protocols.Storage;
 
 import java.io.File;
@@ -122,7 +123,8 @@ public class Peer  implements RMIStub {
 
     @Override
     public void restoreProtocol(String file) {
-
+        Restore restore = new Restore(file);
+        restore.run();
     }
 
     @Override

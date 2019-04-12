@@ -23,7 +23,7 @@ public class Message {
 	public Message(String version, int senderId, String fileId, int chunkNumber, int replicationDeg, byte[] body){
 		this.version = version;
 		this.senderId = senderId;
-		this.fileId = encrypt(fileId);
+		this.fileId = fileId;
 		this.chunkNumber = chunkNumber;
 		this.replicationDeg = replicationDeg;
 		this.body = body;
@@ -52,9 +52,9 @@ public class Message {
 		return hexString.toString();
 	}
 	
-	public synchronized void createPutChunk() {
+	public void createPutChunk() {
 		System.out.println(this.chunkNumber);
-		String header = new String("PUTCHUNK" + " " + this.version + " " + this.senderId + " " + this.fileId + " " + this.chunkNumber + " " + this.replicationDeg + messageEnd);
+		String header = new String("PUTCHUNK" + " " + this.version + " " + this.senderId + " " + encrypt(this.fileId) + " " + this.chunkNumber + " " + this.replicationDeg + messageEnd);
 		ByteArrayOutputStream outputMessageStream = new ByteArrayOutputStream();
 
 		try {
@@ -78,7 +78,7 @@ public class Message {
 	
 	public void createGetChunk() {
 
-		String header = "GETCHUNK" + " " + this.version + " " + this.senderId + " " + this.fileId + " " + this.chunkNumber + messageEnd;
+		String header = "GETCHUNK" + " " + this.version + " " + this.senderId + " " + encrypt(this.fileId) + " " + this.chunkNumber + messageEnd;
 
 		Peer.getMC().sendMsg(header.getBytes());
 	}
@@ -100,7 +100,7 @@ public class Message {
 	
 	public void createDelete() {
 
-		String header = "DELETE" + " " + this.version + " " + this.senderId + " " + this.fileId + messageEnd;
+		String header = "DELETE" + " " + this.version + " " + this.senderId + " " + encrypt(this.fileId) + messageEnd;
 
 		Peer.getMC().sendMsg(header.getBytes());
  	}
