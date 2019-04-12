@@ -10,7 +10,7 @@ import java.util.Arrays;
 
 public class FileHandler {
 
-    public static void splitFile(File file) throws IOException{
+    public static void splitFile(File file, int repDegree) throws IOException{
 
         byte[] data = new byte[1000 * 64];
 
@@ -20,13 +20,15 @@ public class FileHandler {
 
         while((length = stream.read(data)) > 0) {
 
-            Message msg = new Message("1.0", Integer.parseInt(Peer.getPeerId()), file.getName() + file.lastModified(), i, 6, Arrays.copyOf(data,length));
-            msg.createPutChunk();
+            Message msg = new Message("1.0", Integer.parseInt(Peer.getPeerId()),  file.getName() + file.lastModified(), i, repDegree, Arrays.copyOf(data,length));
+            String[] header = msg.createPutChunk();
+            String key = "fileId" +  file.getName() + file.lastModified() + "chkn" + header[4];
+            System.out.println("Sending");
+            ResponseHandler resp = new ResponseHandler(Integer.parseInt(header[5]), key);
+            new Thread(resp).start();
+
             i++;
         }
     }
 
-    public static void mergeFile(){
-
-    }
 }

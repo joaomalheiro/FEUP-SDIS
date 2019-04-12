@@ -19,7 +19,7 @@ public class Backup implements Runnable {
     @Override
     public void run() {
         try {
-            FileHandler.splitFile(new File("./testFiles/" + this.fileName ));
+            FileHandler.splitFile(new File("./testFiles/" + this.fileName), this.repDegree );
         } catch (IOException e) {
             e.printStackTrace();
         }

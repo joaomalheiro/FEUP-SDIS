@@ -56,7 +56,7 @@ public class Peer  implements RMIStub {
                 int option = myObj.nextInt();
 
                 if(option == 1) {
-                    FileHandler.splitFile(new File("./testFiles/test.txt"));
+                    FileHandler.splitFile(new File("./testFiles/test.txt"),6);
                 } else if (option == 2) {
                     Message teste = new Message("1.0", Integer.parseInt(peerId), "4", 6, 6, null);
                     teste.createGetChunk();

@@ -126,13 +126,15 @@ public class MessageController implements Runnable {
         }
     }
 
-    private void handleStored() {
+	private void handleStored() {
+
 		String version = header[1];
 		int senderId = Integer.parseInt(header[2]);
 		String fileId = header[3];
 		int chunkNumber = Integer.parseInt(header[4]);
+        System.out.println("STORED " + version + " " + senderId + " " + fileId + " " + chunkNumber);
+		Peer.getMC().saveChunkReplication(fileId, chunkNumber, senderId);
 
-		System.out.println("STORED " + version + " " + senderId + " " + fileId + " " + chunkNumber);
 
 	}
 

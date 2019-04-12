@@ -51,22 +51,22 @@ public class Message {
 		}
 		return hexString.toString();
 	}
-	
-	public void createPutChunk() {
+
+	public synchronized String[] createPutChunk() {
 		System.out.println(this.chunkNumber);
-		String header = new String("PUTCHUNK" + " " + this.version + " " + this.senderId + " " + encrypt(this.fileId) + " " + this.chunkNumber + " " + this.replicationDeg + messageEnd);
+		String header = new String("PUTCHUNK" + " " + this.version + " " + this.senderId + " " + this.fileId + " " + this.chunkNumber + " " + this.replicationDeg + messageEnd);
 		ByteArrayOutputStream outputMessageStream = new ByteArrayOutputStream();
 
 		try {
 			outputMessageStream.write(Arrays.copyOf(header.getBytes(), header.length()));
-			if(this.body != null) {
+			if(this.body != null)
 				outputMessageStream.write(Arrays.copyOf(this.body, this.body.length));
-			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
 		Peer.getMDB().sendMsg(outputMessageStream.toByteArray());
+		return header.split(" ");
 	}
 	
 	public byte[] createStored() {
