@@ -8,7 +8,7 @@ import peer.Peer;
 public class ResponseHandler implements Runnable{
 
     private long wait_time = 1;
-    private int tries = -1;
+    private int tries = 0;
     private int stored = 0;
     private int repDegree;
     private String key;
@@ -37,6 +37,7 @@ public class ResponseHandler implements Runnable{
 
 
             wait_time *=2;
+            tries++;
 
         }while(stored<repDegree || tries !=5);
 
