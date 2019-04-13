@@ -31,21 +31,12 @@ public class Restore implements Runnable {
 
             Message msg = new Message("1.0", Integer.parseInt(Peer.getPeerId()), file.getName() + file.lastModified(), i, 0 , null);
             msg.createGetChunk();
+        }
 
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-            System.out.print(Peer.getMDR().getChunksFromFile(fileId).size());
-            Chunk chunk = Peer.getMDR().getChunksFromFile(fileId).get(i);
-
-            if(chunk != null) {
-                if (chunk.getData().length < 64000) {
-                    break;
-                }
-            }
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
 
         byte[] data = mergeIntoFile(Peer.getMDR().getChunksFromFile(fileId));
