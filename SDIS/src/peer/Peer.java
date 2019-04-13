@@ -53,23 +53,6 @@ public class Peer  implements RMIStub {
             System.out.println("Peer connected through createRegistry");
         }
 
-            while(true) {
-                Scanner myObj = new Scanner(System.in);
-                System.out.println("PUTCHUNK(1) OR GETCHUNK(2)");
-
-                int option = myObj.nextInt();
-
-                if(option == 1) {
-                    FileHandler.splitFile(new File("./testFiles/test.txt"),6);
-                } else if (option == 2) {
-                    Message teste = new Message("1.0", Integer.parseInt(peerId), "4", 6, 6, null);
-                    teste.createGetChunk();
-                }   else {
-                    Message teste = new Message("1.0", Integer.parseInt(peerId), "4", 6, 6, null);
-                    teste.createDelete();
-
-                }
-            }
     }
 
     private static void initAtributes(String[] args) throws IOException, ClassNotFoundException {

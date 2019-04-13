@@ -25,14 +25,13 @@ public class MessageController implements Runnable {
 	
 		//If message comes from the same peer
 		if(header[2].equals(Peer.getPeerId())) {
-			System.out.println("Message from myself");
+			System.out.println("Message from me");
 			return;
 		}
 		
 		switch(type) {
 			case "PUTCHUNK":
 			    if(Peer.getStorage().allowChunk(packet.getData())){
-                    System.out.println("PUTCHUNK");
                     handlePutChunk();
                 } else {
 			        System.out.println("Not enough space");
@@ -157,10 +156,8 @@ public class MessageController implements Runnable {
 		String fileId = header[3];
 		int chunkNumber = Integer.parseInt(header[4]);
 		int replicationDeg = Integer.parseInt(header[5]);
+        System.out.println("PUTCHUNK " + fileId + " " + chunkNumber + " " + replicationDeg);
 
-		System.out.println(fileId);
-		System.out.println(chunkNumber);
-		System.out.println(replicationDeg);
 
 		Chunk chunk = new Chunk(fileId,chunkNumber,replicationDeg, getDataFromPacket());
 
@@ -179,7 +176,7 @@ public class MessageController implements Runnable {
 		}
 
 		String s = new String(newChunk.getData());
-		System.out.println(s);
+		//System.out.println(s);
 
 		Peer.getMC().getRepDegreeStorage().saveChunkReplication(fileId, chunkNumber, Integer.parseInt(Peer.getPeerId()));
         Peer.getMC().getRepDegreeStorage().setDesiredRepDegree(fileId,replicationDeg);
@@ -198,8 +195,8 @@ public class MessageController implements Runnable {
 			headerLength++;
 		}
 
-		System.out.println(new String(packet.getData()));
-		System.out.println(headerLength);
+		//System.out.println(new String(packet.getData()));
+		//System.out.println(headerLength);
 		return Arrays.copyOfRange(packet.getData(), headerLength + 4, packet.getLength());
 		
 	}
@@ -224,11 +221,11 @@ public class MessageController implements Runnable {
 		int chunkNumber = Integer.parseInt(header[4]);
 		byte[] data = getDataFromPacket();
 
-		System.out.println(fileId);
-		System.out.println(chunkNumber);
-		System.out.println("Received Chunk with data :");
-		System.out.println(new String(data));
-		System.out.println(data.length);
+		//System.out.println(fileId);
+		//System.out.println(chunkNumber);
+		//System.out.println("Received Chunk with data :");
+		//System.out.println(new String(data));
+		//System.out.println(data.length);
 
 		Chunk chunk = new Chunk(fileId,chunkNumber, 0, data);
 		Peer.getMDR().insertChunk(chunk, fileId);
@@ -238,7 +235,7 @@ public class MessageController implements Runnable {
 	public static void sendChunk(Chunk chunk){
 		Message responseMsg = new Message("1.0", Integer.parseInt(Peer.getPeerId()), chunk.getFileId(), chunk.getChunkNumber(), 0,chunk.getData());
 		byte[] response = responseMsg.createChunk();
-		System.out.println(chunk.getData().length);
+		//System.out.println(chunk.getData().length);
 		try {
 			Thread.sleep((long)(Math.random() * 400));
 		} catch (InterruptedException e) {

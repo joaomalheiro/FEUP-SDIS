@@ -111,7 +111,7 @@ public class Message {
 	public void createRemoved() {
 
 		String header = "REMOVED" + " " + this.version + " " + this.senderId + " " + this.fileId + " " + this.chunkNumber + messageEnd;
-		System.out.println(header);
+		//System.out.println(header);
 		Peer.getMC().sendMsg(header.getBytes());
 	}
 	

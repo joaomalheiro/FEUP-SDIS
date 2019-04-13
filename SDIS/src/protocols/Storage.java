@@ -121,7 +121,7 @@ public class Storage {
         if(path[path.length - 1].contains("chk")){
             fileId = path[path.length - 2];
             chunkNumber = Integer.parseInt(path[path.length - 1].replace("chk",""));
-            System.out.println(fileId + " " + chunkNumber);
+            //System.out.println(fileId + " " + chunkNumber);
             Message deleteMsg = new Message("1.0", Integer.parseInt(Peer.getPeerId()), fileId, chunkNumber, 0, null);
             deleteMsg.createRemoved();
 

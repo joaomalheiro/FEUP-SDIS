@@ -20,7 +20,7 @@ public class RepDegreeStorage implements Serializable{
         String key = "";
 
         key = "fileId" + fileId + "chkn" + chunkNumber;
-        System.out.println("Storing" + key + "in" + peerId);
+
         if (!repDegree.containsKey(key)){
             repDegree.put(key, new HashSet<>());
         }

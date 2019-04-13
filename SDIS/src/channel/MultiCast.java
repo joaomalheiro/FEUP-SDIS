@@ -41,7 +41,7 @@ public class MultiCast implements Runnable{
         in.close();
         fileIn.close();
         } catch (IOException e) {
-            System.out.println("No Storage loaded");
+
         }
     }
 
@@ -80,7 +80,6 @@ public class MultiCast implements Runnable{
         String key = "";
 
         key = "fileId" + fileId + "chkn" + chunkNumber;
-        System.out.println("Storing" + key + "in" + peerId);
         if (!repDegree.containsKey(key)){
             repDegree.put(key, new HashSet<>());
         }
