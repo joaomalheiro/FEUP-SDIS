@@ -84,8 +84,9 @@ public class MultiCast implements Runnable{
     }
 
     public void insertChunk(Chunk chunk, String fileId){
-        if(restoredChunks.containsKey(fileId))
-            restoredChunks.get(fileId).put(chunk.getChunkNumber(),chunk);
+        if(restoredChunks.containsKey(fileId)) {
+            restoredChunks.get(fileId).put(chunk.getChunkNumber(), chunk);
+        }
 
     }
 }

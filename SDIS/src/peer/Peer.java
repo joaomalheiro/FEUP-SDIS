@@ -80,7 +80,7 @@ public class Peer  implements RMIStub {
         new Thread(MDB).start();
         new Thread(MDR).start();
 
-        storage = new Storage(1000);
+        storage = new Storage(1000000);
     }
 
     private static void createDir(){
