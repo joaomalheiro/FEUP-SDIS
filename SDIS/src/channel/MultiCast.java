@@ -23,7 +23,13 @@ public class MultiCast implements Runnable{
     private HashMap<String,HashSet<Integer>> repDegree = new HashMap<>();
     private HashMap<String,HashMap<Integer,Chunk>> restoredChunks = new HashMap<>();
 
-
+    /**
+     * Constructor for class MultiCast, class that is used to create the 3 channels used in the service
+     * @param address
+     * @param port
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
     public MultiCast(String address, String port) throws IOException, ClassNotFoundException {
         this.multCast_address = InetAddress.getByName(address);
         this.multCast_port = Integer.parseInt(port);
@@ -42,6 +48,9 @@ public class MultiCast implements Runnable{
         }
     }
 
+    /**
+     * Runnable method that waits for the datagram packet to be received and then creates a MessageController
+     */
     public void run() {
         byte[] buf;
         boolean end = false;
@@ -59,6 +68,10 @@ public class MultiCast implements Runnable{
         multCast_socket.close();
     }
 
+    /**
+     * Sends a byte[] msg through the channel
+     * @param msg
+     */
     public void sendMsg(byte[] msg){
 
         DatagramPacket packet = new DatagramPacket(Arrays.copyOf(msg, msg.length), msg.length, multCast_address, multCast_port);
@@ -69,35 +82,38 @@ public class MultiCast implements Runnable{
         }
     }
 
+    /**
+     * Getter for class attribute repDegreeStorage
+     * @return RepDegreeStorage
+     */
     public RepDegreeStorage getRepDegreeStorage() {
         return repDegreeStorage;
     }
 
-    public void saveChunkReplication(String fileId,int chunkNumber,int peerId){
-        String key = "";
-
-        key = "fileId" + fileId + "chkn" + chunkNumber;
-        if (!repDegree.containsKey(key)){
-            repDegree.put(key, new HashSet<>());
-        }
-        repDegree.get(key).add(peerId);
-
-    }
-
-    public int getRepDegree(String key){
-        return repDegree.get(key).size();
-    }
-
+    /**
+     * Getter from the HashMap<Integer,Chunk> based on the key fileId passed as parameter
+     * @param fileId
+     * @return HashMap<Integer,Chunk>
+     */
     public HashMap<Integer,Chunk> getChunksFromFile(String fileId){
         if(restoredChunks.containsKey(fileId)) {
             return restoredChunks.get(fileId);
         } else return null;
     }
 
+    /**
+     * Inserts the a new fileId key so that the restore process for that file can be started
+     * @param fileId
+     */
     public void insertFileId(String fileId){
         restoredChunks.put(fileId, new HashMap<>());
     }
 
+    /**
+     * Inserts the chunk passed as parameter to the restoredChunks from the fileId passed also as parameter
+     * @param chunk
+     * @param fileId
+     */
     public void insertChunk(Chunk chunk, String fileId){
         if(restoredChunks.containsKey(fileId)) {
             restoredChunks.get(fileId).put(chunk.getChunkNumber(), chunk);

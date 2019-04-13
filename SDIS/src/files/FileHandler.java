@@ -10,6 +10,12 @@ import java.util.Arrays;
 
 public class FileHandler {
 
+    /**
+     * Splits the file passed as parameter into different bytes[] of data and sends the putchunk message to continue to run the backup protocol
+     * @param file
+     * @param repDegree
+     * @throws IOException
+     */
     public static void splitFile(File file, int repDegree) throws IOException{
 
         byte[] data = new byte[1000 * 64];
@@ -21,24 +27,27 @@ public class FileHandler {
         //System.out.println(file.length());
 
         while((length = stream.read(data)) > 0) {
-            //System.out.println(file.getName() + " put" + file.lastModified());
+
             Message msg = new Message("1.0", Integer.parseInt(Peer.getPeerId()),  file.getName() + file.lastModified(), i, repDegree, Arrays.copyOf(data,length));
             String[] header = msg.createPutChunk();
+
             String key = "fileId" +  Message.encrypt(file.getName() + file.lastModified()) + "chkn" + header[4];
-            //System.out.println("Sending " + key);
             Peer.getMC().getRepDegreeStorage().setDesiredRepDegree(Message.encrypt(file.getName() + file.lastModified()),repDegree);
             ResponseHandler resp = new ResponseHandler(Integer.parseInt(header[5]), key,msg);
+
             new Thread(resp).start();
 
             i++;
         }
         if(file.length() % 64000 == 0) {
+
             Message msg = new Message("1.0", Integer.parseInt(Peer.getPeerId()),  file.getName() + file.lastModified(), i, repDegree, null);
             String[] header = msg.createPutChunk();
+
             String key = "fileId" +  Message.encrypt(file.getName() + file.lastModified()) + "chkn" + header[4];
-            //System.out.println("Sending " + key);
             Peer.getMC().getRepDegreeStorage().setDesiredRepDegree(Message.encrypt(file.getName() + file.lastModified()),repDegree);
             ResponseHandler resp = new ResponseHandler(Integer.parseInt(header[5]), key,null);
+
             new Thread(resp).start();
         }
     }
