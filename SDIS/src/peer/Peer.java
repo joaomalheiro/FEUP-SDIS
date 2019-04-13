@@ -11,7 +11,6 @@ import java.rmi.server.UnicastRemoteObject;
 
 public class Peer  implements RMIStub {
 
-    private static int serverId;
     private static String peerId;
     private static String peerAcessPoint;
     private static String protocolVersion;
@@ -50,8 +49,8 @@ public class Peer  implements RMIStub {
 
     private static void initAtributes(String[] args) throws IOException, ClassNotFoundException {
         protocolVersion = args[0];
-        serverId = Integer.parseInt(args[1]);
-        peerId = args[2];
+        peerId = (args[1]);
+        peerAcessPoint = args[2];
         MC = new MultiCast(args[3],args[4]);
         MDB = new MultiCast(args[5],args[6]);
         MDR = new MultiCast(args[7],args[8]);
