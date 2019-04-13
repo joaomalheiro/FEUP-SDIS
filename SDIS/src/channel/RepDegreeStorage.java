@@ -7,6 +7,7 @@ import protocols.Chunk;
 import java.io.*;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.concurrent.TimeUnit;
 
 public class RepDegreeStorage implements Serializable{
     private HashMap<String,HashSet<Integer>> repDegree = new HashMap<>();
@@ -31,6 +32,12 @@ public class RepDegreeStorage implements Serializable{
         if (repDegree.containsKey(key)){
             repDegree.get(key).remove(peerId);
             if(getRepDegree(key) < getDesiredRepDegree(fileId)){
+                long wait_time = (long) (Math.random() * (400 - 1)) + 1;
+                try {
+                    TimeUnit.MILLISECONDS.sleep(wait_time);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 ResponseHandler resp = new ResponseHandler(getDesiredRepDegree(fileId), key);
                 new Thread(resp).start();
             }
