@@ -11,17 +11,23 @@ public class ResponseHandler implements Runnable{
     private int tries = 0;
     private int repDegree;
     private Message msg;
-
-
     private String key;
 
-
+    /**
+     * Constructor for the class ResponseHandler that is a helper for the backup procotol repDegree rules
+     * @param repDegree
+     * @param key
+     * @param msg
+     */
     public ResponseHandler(int repDegree, String key,Message msg) {
         this.repDegree = repDegree;
         this.key = key;
         this.msg = msg;
     }
 
+    /**
+     *
+     */
     @Override
     public void run() {
         int stored = Peer.getMC().getRepDegreeStorage().getRepDegree(key);

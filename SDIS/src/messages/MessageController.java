@@ -12,7 +12,11 @@ import java.util.concurrent.TimeUnit;
 public class MessageController implements Runnable {
 	private DatagramPacket packet;
 	private String[] header;
-	
+
+    /**
+     * Constructor for MessageController class. It is the class called when a new packet is received
+     * @param packet
+     */
 	public MessageController(DatagramPacket packet) {
 		this.packet = packet;
 	}
@@ -59,6 +63,9 @@ public class MessageController implements Runnable {
 		
 	}
 
+    /**
+     * Handles a removed message received in the MultiCast Channel
+     */
     private void handleRemoved() {
         String fileId = header[3];
         int chunkNumber = Integer.parseInt(header[4]);
@@ -75,10 +82,11 @@ public class MessageController implements Runnable {
             }
            Peer.getMC().getRepDegreeStorage().removeChunkReplication(fileId,chunkNumber,Integer.parseInt(header[2]),chunk.getData());
         }
-
-
     }
 
+    /**
+     * Handles a delete message received in the MultiCast Channel
+     */
     private void handleDelete() {
 
         String fileId = header[3];
@@ -94,6 +102,10 @@ public class MessageController implements Runnable {
         }
     }
 
+    /**
+     * Deletes a file passed as parameter
+     * @param file
+     */
     private void delete(File file) {
         if(file.isDirectory()){
 
@@ -132,7 +144,10 @@ public class MessageController implements Runnable {
         }
     }
 
-	private void handleStored() {
+    /**
+     * Handles a stored message received in the MultiCast Channel
+     */
+    private void handleStored() {
 
 		String version = header[1];
 		int senderId = Integer.parseInt(header[2]);
@@ -142,6 +157,9 @@ public class MessageController implements Runnable {
 		Peer.getMC().getRepDegreeStorage().saveChunkReplication(fileId, chunkNumber, senderId);
 	}
 
+    /**
+     * Handles a putchunk message received in the MultiCast Channel
+     */
 	private void handlePutChunk() {
 		String fileId = header[3];
 		int chunkNumber = Integer.parseInt(header[4]);
@@ -166,13 +184,16 @@ public class MessageController implements Runnable {
 		}
 
 		String s = new String(newChunk.getData());
-		//System.out.println(s);
 
 		Peer.getMC().getRepDegreeStorage().saveChunkReplication(fileId, chunkNumber, Integer.parseInt(Peer.getPeerId()));
         Peer.getMC().getRepDegreeStorage().setDesiredRepDegree(fileId,replicationDeg);
 		sendStored(fileId, chunkNumber, replicationDeg);
 	}
 
+    /**
+     * Parsed the body of the message and returns it as a byte[]
+     * @return
+     */
 	private byte[] getDataFromPacket() {
 		
 		int headerLength = 0;
@@ -185,12 +206,13 @@ public class MessageController implements Runnable {
 			headerLength++;
 		}
 
-		//System.out.println(new String(packet.getData()));
-		//System.out.println(headerLength);
 		return Arrays.copyOfRange(packet.getData(), headerLength + 4, packet.getLength());
 		
 	}
 
+    /**
+     * Handles a getchunk message received in the MultiCast Channel
+     */
 	private void handleGetChunk(){
 		String fileId = header[3];
 		int chunkNumber = Integer.parseInt(header[4]);
@@ -204,9 +226,11 @@ public class MessageController implements Runnable {
 		} catch (ClassNotFoundException e) {
 			System.out.println("Do not own that chunk");
 		}
-
 	}
 
+    /**
+     * Handles a chunk message received in the MultiCast Channel
+     */
 	private void handleChunk() {
 		String fileId = header[3];
 		int chunkNumber = Integer.parseInt(header[4]);
@@ -223,10 +247,14 @@ public class MessageController implements Runnable {
 
 	}
 
+    /**
+     * Sends a chunk through the MDR channel
+     * @param chunk
+     */
 	public static void sendChunk(Chunk chunk){
 		Message responseMsg = new Message("1.0", Integer.parseInt(Peer.getPeerId()), chunk.getFileId(), chunk.getChunkNumber(), 0,chunk.getData());
 		byte[] response = responseMsg.createChunk();
-		//System.out.println(chunk.getData().length);
+
 		try {
 			Thread.sleep((long)(Math.random() * 400));
 		} catch (InterruptedException e) {
@@ -236,6 +264,12 @@ public class MessageController implements Runnable {
 		Peer.getMDR().sendMsg(response);
 	}
 
+    /**
+     * Sends a stored message through the MC channel
+     * @param fileId
+     * @param chunkNumber
+     * @param replicationDeg
+     */
 	private void sendStored(String fileId, int chunkNumber, int replicationDeg){
 
 		Message responseMsg = new Message("1.0", Integer.parseInt(Peer.getPeerId()), fileId, chunkNumber, replicationDeg, null);
@@ -256,6 +290,11 @@ public class MessageController implements Runnable {
 
 	}
 
+    /**
+     * Saves a chunk in the peer folder and file folder passed as parameter
+     * @param chunk
+     * @param fileId
+     */
 	private static void saveChunk(Chunk chunk, String fileId){
 		try {
 			FileOutputStream fileOut = new FileOutputStream("./peerDisk/peer" + Peer.getPeerId() + "/backup/" + fileId  + "/chk" + chunk.getChunkNumber() );
@@ -268,6 +307,14 @@ public class MessageController implements Runnable {
 		}
 	}
 
+    /**
+     * Loads a chunk from the filesystem of the peer
+     * @param fileId
+     * @param chunkNumber
+     * @return
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
 	public static Chunk loadChunk(String fileId, int chunkNumber) throws IOException, ClassNotFoundException {
 
 		Chunk chunk = null;
@@ -280,6 +327,10 @@ public class MessageController implements Runnable {
 		return chunk;
 	}
 
+    /**
+     * Parses the header of a message
+     * @return String[]
+     */
 	private String[] parsePacketHeader() {
 		
 		byte[] buffer;
