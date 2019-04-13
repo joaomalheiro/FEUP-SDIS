@@ -14,7 +14,6 @@ public class RepDegreeStorage implements Serializable{
     private HashMap<String,Integer> desiredRepDegree = new HashMap<>();
     private HashSet<Message> deleteMessages = new HashSet<>();
 
-
     public void saveChunkReplication(String fileId,int chunkNumber,int peerId){
         String key = "";
 

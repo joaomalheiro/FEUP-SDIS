@@ -5,6 +5,7 @@ import protocols.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
@@ -113,5 +114,11 @@ public class Peer  implements RMIStub {
     public void reclaimProtocol(int reservedSpace) {
         Reclaim reclaim = new Reclaim(reservedSpace);
         reclaim.run();
+    }
+
+    @Override
+    public void stateProtocol() throws RemoteException {
+        State state = new State();
+        state.run();
     }
 }

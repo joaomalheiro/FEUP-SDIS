@@ -39,6 +39,9 @@ public class TestApp {
                 operand1 = args[2];
                 stub.reclaimProtocol(Integer.parseInt(operand1));
                 break;
+            case "STATE":
+                stub.stateProtocol();
+                break;
 
         }
     }

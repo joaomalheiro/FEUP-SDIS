@@ -18,6 +18,14 @@ public class Storage {
         }
     }
 
+    public long getSpaceReserved() {
+        return spaceReserved;
+    }
+
+    public long getSpaceOcupied() {
+        return spaceOcupied;
+    }
+
     public void updateSpaceOcupied(){
         File peerFolder = new File("./peerDisk/peer" + Peer.getPeerId());
 

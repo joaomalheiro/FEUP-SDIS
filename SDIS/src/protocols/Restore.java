@@ -18,8 +18,6 @@ public class Restore implements Runnable {
     @Override
     public void run() {
 
-        //System.out.println("Hey");
-
         file = new File("./testFiles/" + fileName);
         int nChunks = (int)file.length() / 64000 + 1;
         String fileId = Message.encrypt(file.getName() + file.lastModified());
