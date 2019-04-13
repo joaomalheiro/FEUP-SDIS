@@ -194,14 +194,15 @@ public class MessageController implements Runnable {
 	private void handleGetChunk(){
 		String fileId = header[3];
 		int chunkNumber = Integer.parseInt(header[4]);
+		System.out.println(header[0] + " " + fileId + " " + chunkNumber);
 
 		try {
             Chunk chunk = loadChunk(fileId, chunkNumber);
 			sendChunk(chunk);
 		} catch (IOException e) {
-			e.printStackTrace();
+			System.out.println("Do not own that chunk");
 		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
+			System.out.println("Do not own that chunk");
 		}
 
 	}
