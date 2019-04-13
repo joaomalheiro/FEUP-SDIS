@@ -188,30 +188,6 @@ public class MessageController implements Runnable {
 		System.out.println(new String(packet.getData()));
 		System.out.println(headerLength);
 		return Arrays.copyOfRange(packet.getData(), headerLength + 4, packet.getLength());
-/*
-		ByteArrayInputStream stream = new ByteArrayInputStream(packet.getData());
-		BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
-
-		String header="";
-
-
-		try {
-			header += reader.readLine();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		int body_idx = header.length()+2*2;
-
-		byte[] body = Arrays.copyOfRange(packet.getData(),body_idx ,
-				packet.getLength());
-
-		System.out.println(new String(packet.getData()));
-		System.out.println(body_idx);
-
-
-		return body;
-		*/
 		
 	}
 
