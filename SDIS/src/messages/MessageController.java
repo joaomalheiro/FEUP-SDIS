@@ -176,7 +176,7 @@ public class MessageController implements Runnable {
 	
 	private byte[] getDataFromPacket() {
 		
-		int headerLength = 3;
+		int headerLength = 0;
 		
 		for(int i = 0; i < header.length; i++){
 			headerLength += header[i].length();
@@ -184,7 +184,7 @@ public class MessageController implements Runnable {
                 break;
 		}
 
-		return Arrays.copyOfRange(packet.getData(), headerLength, packet.getLength() );
+		return Arrays.copyOfRange(packet.getData(), headerLength + 14, packet.getLength());
 		
 	}
 
@@ -204,20 +204,25 @@ public class MessageController implements Runnable {
 	}
 
 	private void handleChunk() {
-		int fileId = Integer.parseInt(header[3]);
+		String fileId = header[3];
 		int chunkNumber = Integer.parseInt(header[4]);
-		byte[] data = header[5].getBytes();
+		byte[] data = getDataFromPacket();
 
 		System.out.println(fileId);
 		System.out.println(chunkNumber);
-		System.out.println(data);
+		System.out.println("Received Chunk with data :");
+		System.out.println(new String(data));
+		System.out.println(data.length);
+
+		Chunk chunk = new Chunk(fileId,chunkNumber, 0, data);
+		Peer.getMDR().insertChunk(chunk, fileId);
 
 	}
 
 	private void sendChunk(Chunk chunk){
 		Message responseMsg = new Message("1.0", Integer.parseInt(Peer.getPeerId()), chunk.getFileId(), chunk.getChunkNumber(), 0,chunk.getData());
 		byte[] response = responseMsg.createChunk();
-
+		System.out.println(chunk.getData().length);
 		try {
 			Thread.sleep((long)(Math.random() * 400));
 		} catch (InterruptedException e) {
@@ -260,12 +265,14 @@ public class MessageController implements Runnable {
 	}
 
 	public static Chunk loadChunk(String fileId, int chunkNumber) throws IOException, ClassNotFoundException {
+
 		Chunk chunk = null;
 		FileInputStream fileIn = new FileInputStream("./peerDisk/peer" + Peer.getPeerId() + "/backup/" + fileId  + "/chk" + chunkNumber);
 		ObjectInputStream in = new ObjectInputStream(fileIn);
 		chunk = (Chunk) in.readObject();
 		in.close();
 		fileIn.close();
+
 		return chunk;
 	}
 

@@ -29,7 +29,7 @@ public class Message {
 		this.body = body;
 	}
 
-	private String encrypt(String text) {
+	public static String encrypt(String text) {
 
 		MessageDigest digest = null;
 		try {
@@ -42,7 +42,7 @@ public class Message {
 		return "error in hashing";
 	}
 
-	private String bytesToHex(byte[] hash) {
+	private static String bytesToHex(byte[] hash) {
 		StringBuffer hexString = new StringBuffer();
 		for (int i = 0; i < hash.length; i++) {
 			String hex = Integer.toHexString(0xff & hash[i]);
@@ -54,7 +54,7 @@ public class Message {
 
 	public synchronized String[] createPutChunk() {
 		System.out.println(this.chunkNumber);
-		String header = new String("PUTCHUNK" + " " + this.version + " " + this.senderId + " " + this.fileId + " " + this.chunkNumber + " " + this.replicationDeg + messageEnd);
+		String header = new String("PUTCHUNK" + " " + this.version + " " + this.senderId + " " + encrypt(this.fileId) + " " + this.chunkNumber + " " + this.replicationDeg + messageEnd);
 		ByteArrayOutputStream outputMessageStream = new ByteArrayOutputStream();
 
 		try {
@@ -89,9 +89,11 @@ public class Message {
 		String header = "CHUNK" + " " + this.version + " " + this.senderId + " " + this.fileId + " " + this.chunkNumber + messageEnd;
 		ByteArrayOutputStream outputMessageStream = new ByteArrayOutputStream();
 
+		System.out.println(this.body.length);
+
 		try {
-			outputMessageStream.write(header.getBytes());
-			outputMessageStream.write(this.body);
+			outputMessageStream.write(Arrays.copyOf(header.getBytes(), header.length()));
+			outputMessageStream.write(Arrays.copyOf(this.body, this.body.length));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

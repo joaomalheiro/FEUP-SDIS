@@ -5,11 +5,12 @@ import peer.Peer;
 
 import java.io.*;
 import java.util.Arrays;
-import java.util.Hashtable;
+import java.util.HashMap;
 
 public class Restore implements Runnable {
-
     private String fileName;
+    private String fileId;
+    private File file;
 
     public Restore(String fileName){
         this.fileName = fileName;
@@ -18,11 +19,13 @@ public class Restore implements Runnable {
     @Override
     public void run() {
 
+        System.out.println("Hey");
 
-        Hashtable chunks = new Hashtable<Integer,Chunk>();
-
-        File file = new File("./testFiles/" + fileName);
+        file = new File("./testFiles/" + fileName);
         int nChunks = (int)file.length() / 64000 + 1;
+        fileId = Message.encrypt(file.getName() + file.lastModified());
+
+        Peer.getMDR().insertFileId(fileId);
 
         for (int i = 0 ; i < nChunks; i++){
 
@@ -30,26 +33,30 @@ public class Restore implements Runnable {
             msg.createGetChunk();
 
             try {
-                Thread.sleep(200);
+                Thread.sleep(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
 
-            //save chunk from MC to this class Hashtable
+            System.out.print(Peer.getMDR().getChunksFromFile(fileId).size());
+            Chunk chunk = Peer.getMDR().getChunksFromFile(fileId).get(i);
+
+            if(chunk != null) {
+                if (chunk.getData().length < 64000) {
+                    break;
+                }
+            }
         }
 
-        byte[] data = mergeIntoFile(chunks);
+        byte[] data = mergeIntoFile(Peer.getMDR().getChunksFromFile(fileId));
 
         createFile(data);
     }
 
     private void createFile(byte[] data) {
 
-        String restoreDirNam = "peerDisk/peer" + Peer.getPeerId() + "/restored/";
-        File restoredFolder = new File("./" + restoreDirNam);
-
         try {
-            OutputStream streamToFile = new FileOutputStream(restoredFolder + fileName);
+            FileOutputStream streamToFile = new FileOutputStream("./peerDisk/peer" + Peer.getPeerId() + "/restored/" + file.getName());
             streamToFile.write(data);
             streamToFile.close();
         } catch (IOException e) {
@@ -57,7 +64,7 @@ public class Restore implements Runnable {
         }
     }
 
-    private byte[] mergeIntoFile(Hashtable<Integer,Chunk> chunks) {
+    private byte[] mergeIntoFile(HashMap<Integer,Chunk> chunks) {
 
         byte[] data = new byte[0];
         ByteArrayOutputStream outputMessageStream = new ByteArrayOutputStream();
@@ -70,10 +77,8 @@ public class Restore implements Runnable {
                 } catch (IOException e) {
                 e.printStackTrace();
             }
-
         }
-
-        return data;
+        return outputMessageStream.toByteArray();
     }
 
 }
