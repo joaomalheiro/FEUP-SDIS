@@ -18,7 +18,7 @@ public class Message {
 	private int replicationDeg;
 	private byte[] body;
 
-	public static String messageEnd = " " + (char) 0xD + (char) 0xA + " " + (char) 0xD + (char) 0xA;
+	public static String messageEnd = " " + (char) 0xD + (char) 0xA + (char) 0xD + (char) 0xA;
 
 	public Message(String version, int senderId, String fileId, int chunkNumber, int replicationDeg, byte[] body){
 		this.version = version;

@@ -177,13 +177,41 @@ public class MessageController implements Runnable {
 		
 		int headerLength = 0;
 		
-		for(int i = 0; i < header.length; i++){
-			headerLength += header[i].length();
-            if(header[i].equals("\r\n"))
-                break;
+		for(int i = 0; i < packet.getData().length; i++){
+
+            if((packet.getData()[i] == (char)0xD) &&(packet.getData()[i+1] == (char)0xA)&&(packet.getData()[i] == (char)0xD)&&(packet.getData()[i+1] == (char)0xA)){
+				break;
+			}
+			headerLength++;
 		}
 
-		return Arrays.copyOfRange(packet.getData(), headerLength + 14, packet.getLength());
+		System.out.println(new String(packet.getData()));
+		System.out.println(headerLength);
+		return Arrays.copyOfRange(packet.getData(), headerLength + 4, packet.getLength());
+/*
+		ByteArrayInputStream stream = new ByteArrayInputStream(packet.getData());
+		BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
+
+		String header="";
+
+
+		try {
+			header += reader.readLine();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		int body_idx = header.length()+2*2;
+
+		byte[] body = Arrays.copyOfRange(packet.getData(),body_idx ,
+				packet.getLength());
+
+		System.out.println(new String(packet.getData()));
+		System.out.println(body_idx);
+
+
+		return body;
+		*/
 		
 	}
 
