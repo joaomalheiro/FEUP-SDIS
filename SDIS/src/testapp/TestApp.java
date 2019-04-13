@@ -34,6 +34,10 @@ public class TestApp {
             case "DELETE":
                 stub.deleteProtocol(operand1);
                 break;
+            case "RECLAIM":
+                operand1 = args[2];
+                stub.reclaimProtocol(Integer.parseInt(operand1));
+                break;
 
         }
     }

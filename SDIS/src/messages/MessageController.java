@@ -63,7 +63,7 @@ public class MessageController implements Runnable {
         String fileId = header[3];
         int chunkNumber = Integer.parseInt(header[4]);
 	    System.out.println(header[0] + " " + header[1] + " " + header[2] + " " + header[3]);
-	    Peer.getMC().getRepDegreeStorage().removeChunkReplication(fileId,chunkNumber,Integer.parseInt(Peer.getPeerId()));
+		Peer.getMC().getRepDegreeStorage().removeChunkReplication(fileId,chunkNumber,Integer.parseInt(header[2]));
 
     }
 
@@ -139,8 +139,6 @@ public class MessageController implements Runnable {
 		int chunkNumber = Integer.parseInt(header[4]);
         System.out.println("STORED " + version + " " + senderId + " " + fileId + " " + chunkNumber);
 		Peer.getMC().getRepDegreeStorage().saveChunkReplication(fileId, chunkNumber, senderId);
-
-
 	}
 
 	private void handlePutChunk() {
@@ -171,9 +169,10 @@ public class MessageController implements Runnable {
 		String s = new String(newChunk.getData());
 		System.out.println(s);
 
+        Peer.getMC().getRepDegreeStorage().setDesiredRepDegree(fileId,replicationDeg);
 		sendStored(fileId, chunkNumber, replicationDeg);
 	}
-	
+
 	private byte[] getDataFromPacket() {
 		
 		int headerLength = 0;

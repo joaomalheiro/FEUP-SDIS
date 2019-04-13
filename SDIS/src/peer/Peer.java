@@ -4,6 +4,7 @@ import channel.MultiCast;
 import files.FileHandler;
 import messages.Message;
 import protocols.Backup;
+import protocols.Reclaim;
 import protocols.Restore;
 import protocols.Storage;
 
@@ -133,5 +134,10 @@ public class Peer  implements RMIStub {
     @Override
     public void deleteProtocol(String file) {
 
+    }
+    @Override
+    public void reclaimProtocol(int reservedSpace) {
+        Reclaim reclaim = new Reclaim(reservedSpace);
+        reclaim.run();
     }
 }
