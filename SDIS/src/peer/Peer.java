@@ -59,6 +59,8 @@ public class Peer  implements RMIStub {
         new Thread(MDB).start();
         new Thread(MDR).start();
 
+        MC.sendMsg(new String("JOINED 1.0 " + Peer.getPeerId()).getBytes());
+
         storage = new Storage(1000000);
     }
 

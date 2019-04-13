@@ -4,12 +4,13 @@ import peer.Peer;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
-public class Message {
+public class Message implements Serializable {
 	
 	private String version;
 	private int senderId;
@@ -152,6 +153,13 @@ public class Message {
 
 		Peer.getMC().sendMsg(header.getBytes());
  	}
+
+ 	public void sendDelete() {
+		String header = new String("DELETE" + " " + this.version + " " + this.senderId + " " + this.fileId + messageEnd);
+
+		Peer.getMC().sendMsg(header.getBytes());
+	}
+	
 
 	/**
 	 * Created removed message

@@ -57,6 +57,10 @@ public class MessageController implements Runnable {
                 break;
             case "REMOVED":
                 handleRemoved();
+                break;
+			case "JOINED":
+				handleJoined();
+				break;
 			default:
 				break;
 		}
@@ -66,7 +70,11 @@ public class MessageController implements Runnable {
     /**
      * Handles a removed message received in the MultiCast Channel
      */
-    private void handleRemoved() {
+	private void handleJoined() {
+		Peer.getMC().getRepDegreeStorage().sendAllDeleteMessages();
+	}
+
+	private void handleRemoved() {
         String fileId = header[3];
         int chunkNumber = Integer.parseInt(header[4]);
 	    System.out.println(header[0] + " " + header[1] + " " + header[2] + " " + header[3]);
@@ -93,6 +101,9 @@ public class MessageController implements Runnable {
 
         File directory = new File("./peerDisk/peer" + Peer.getPeerId() + "/backup/" + fileId);
 		System.out.println(header[0] + " " + header[1] + " " + header[2] + " " + header[3]);
+		Message msg = new Message("1.0",Integer.parseInt(Peer.getPeerId()),fileId,0,0,null);
+		Peer.getMC().getRepDegreeStorage().addDeleteMessage(msg);
+
         if(!directory.exists()){
 
             System.out.println("Directory does not exist.");
