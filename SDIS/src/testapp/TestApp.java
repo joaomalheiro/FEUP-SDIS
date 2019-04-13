@@ -11,15 +11,15 @@ public class TestApp {
 
     public static void main(String args[]) throws RemoteException, NotBoundException {
 
-        String peerId = args[0];
+        String peerAcessPoint = args[0];
         String protocol = args[1];
 
         String operand1 = null, operand2;
 
         Registry registry = LocateRegistry.getRegistry("localhost");
-        RMIStub stub = (RMIStub) registry.lookup(peerId);
+        RMIStub stub = (RMIStub) registry.lookup(peerAcessPoint);
 
-        System.out.println("Initiation Peer : " + peerId + "\n" + "Protocol : " + protocol);
+        System.out.println("Initiation Peer : " + peerAcessPoint + "\n" + "Protocol : " + protocol);
 
         switch (protocol){
             case "BACKUP":

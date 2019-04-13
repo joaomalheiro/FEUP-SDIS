@@ -24,7 +24,6 @@ public class Peer  implements RMIStub {
 
     public static void main(String args[]) throws IOException, ClassNotFoundException {
 
-
         initAtributes(args);
 
         createDir();
@@ -37,7 +36,7 @@ public class Peer  implements RMIStub {
         //RUN IN TERMINAL rmiregistry &
         try {
             Registry reg = LocateRegistry.getRegistry();
-            reg.rebind(Peer.getPeerId(), stub);
+            reg.rebind(peerAcessPoint, stub);
 
             System.out.println("Peer connected through getRegistry");
         } catch (Exception e) {
