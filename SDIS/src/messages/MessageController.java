@@ -7,6 +7,7 @@ import protocols.Chunk;
 import java.io.*;
 import java.net.DatagramPacket;
 import java.util.Arrays;
+import java.util.concurrent.TimeUnit;
 
 public class MessageController implements Runnable {
 	private DatagramPacket packet;
@@ -229,6 +230,12 @@ public class MessageController implements Runnable {
 
 		try {
 			Thread.sleep((long)(Math.random() * 400));
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		long wait_time = (long) (Math.random() * (400 - 1)) + 1;
+		try {
+			TimeUnit.MILLISECONDS.sleep(wait_time);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
