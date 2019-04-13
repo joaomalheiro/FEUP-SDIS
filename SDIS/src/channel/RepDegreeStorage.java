@@ -48,7 +48,10 @@ public class RepDegreeStorage implements Serializable{
 
     }
     public int getRepDegree(String key){
-        return repDegree.get(key).size();
+
+        if(repDegree.containsKey(key))
+            return repDegree.get(key).size();
+        return 0;
     }
 
     public int getDesiredRepDegree(String key){

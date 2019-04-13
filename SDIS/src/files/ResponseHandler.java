@@ -21,7 +21,7 @@ public class ResponseHandler implements Runnable{
 
     @Override
     public void run() {
-
+        stored = Peer.getMC().getRepDegreeStorage().getRepDegree(key);
         do {
             System.out.println(repDegree + "rep" + stored + "stored");
             try {
