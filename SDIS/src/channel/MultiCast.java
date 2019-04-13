@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -18,6 +19,7 @@ public class MultiCast implements Runnable{
     public int multCast_port;
 
     private HashMap<String,HashSet<Integer>> repDegree = new HashMap<>();
+    private HashMap<String,HashMap<Integer,Chunk>> restoredChunks = new HashMap<>();
 
     public MultiCast(String address, String port) throws IOException {
         this.multCast_address = InetAddress.getByName(address);
@@ -66,8 +68,24 @@ public class MultiCast implements Runnable{
         repDegree.get(key).add(peerId);
 
     }
+
     public int getRepDegree(String key){
         return repDegree.get(key).size();
     }
 
+    public HashMap<Integer,Chunk> getChunksFromFile(String fileId){
+        if(restoredChunks.containsKey(fileId)) {
+            return restoredChunks.get(fileId);
+        } else return null;
+    }
+
+    public void insertFileId(String fileId){
+        restoredChunks.put(fileId, new HashMap<>());
+    }
+
+    public void insertChunk(Chunk chunk, String fileId){
+        if(restoredChunks.containsKey(fileId))
+            restoredChunks.get(fileId).put(chunk.getChunkNumber(),chunk);
+
+    }
 }

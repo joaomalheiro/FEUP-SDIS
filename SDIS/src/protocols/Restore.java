@@ -8,7 +8,6 @@ import java.util.Arrays;
 import java.util.Hashtable;
 
 public class Restore implements Runnable {
-
     private String fileName;
 
     public Restore(String fileName){
@@ -18,11 +17,13 @@ public class Restore implements Runnable {
     @Override
     public void run() {
 
-
+        System.out.println("Hey");
         Hashtable chunks = new Hashtable<Integer,Chunk>();
 
         File file = new File("./testFiles/" + fileName);
         int nChunks = (int)file.length() / 64000 + 1;
+
+        Peer.getMDR().insertFileId(fileName);
 
         for (int i = 0 ; i < nChunks; i++){
 
@@ -36,6 +37,12 @@ public class Restore implements Runnable {
             }
 
             //save chunk from MC to this class Hashtable
+
+            Chunk chunk = Peer.getMDR().getChunksFromFile(fileName).get(i);
+
+            if(chunk != null) {
+                break;
+            } else return;
         }
 
         byte[] data = mergeIntoFile(chunks);
@@ -49,7 +56,7 @@ public class Restore implements Runnable {
         File restoredFolder = new File("./" + restoreDirNam);
 
         try {
-            OutputStream streamToFile = new FileOutputStream(restoredFolder + fileName);
+            OutputStream streamToFile = new FileOutputStream(restoredFolder.getName() + fileName);
             streamToFile.write(data);
             streamToFile.close();
         } catch (IOException e) {
