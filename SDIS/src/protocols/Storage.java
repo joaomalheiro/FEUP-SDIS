@@ -102,7 +102,7 @@ public class Storage {
 
         }else{
             if(this.spaceReserved < this.spaceOcupied) {
-                handleDeleteFile(file.getAbsolutePath());
+                handleDeleteFile(file);
                 //if file, then delete it
                 file.delete();
                 System.out.println("File is deleted : " + file.getAbsolutePath());
@@ -111,14 +111,15 @@ public class Storage {
         }
     }
 
-    private void handleDeleteFile(String absolutePath) {
+    private void handleDeleteFile(File file) {
+        String absolutePath = file.getAbsolutePath();
         String fileId;
         int chunkNumber;
 
         String[] path = absolutePath.split("\\\\");
         if(path[path.length - 1].contains("chk")){
-            fileId = path[path.length - 1].replace("chk","");
-            chunkNumber = Integer.parseInt(path[path.length - 2].replace("fileId",""));
+            fileId = path[path.length - 2];
+            chunkNumber = Integer.parseInt(path[path.length - 1].replace("chk",""));
             System.out.println(fileId + " " + chunkNumber);
             Message deleteMsg = new Message("1.0", Integer.parseInt(Peer.getPeerId()), fileId, chunkNumber, 0, null);
             deleteMsg.createRemoved();

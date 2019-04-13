@@ -27,7 +27,7 @@ public class Peer  implements RMIStub {
 
     //1 2 1 230.0.0.0 4446 225.0.0.0 5000 229.0.0.0 4450
 
-    public static void main(String args[]) throws IOException {
+    public static void main(String args[]) throws IOException, ClassNotFoundException {
 
 
         initAtributes(args);
@@ -68,7 +68,7 @@ public class Peer  implements RMIStub {
             }
     }
 
-    private static void initAtributes(String[] args) throws IOException {
+    private static void initAtributes(String[] args) throws IOException, ClassNotFoundException {
         protocolVersion = args[0];
         serverId = Integer.parseInt(args[1]);
         peerId = args[2];
@@ -80,7 +80,7 @@ public class Peer  implements RMIStub {
         new Thread(MDB).start();
         new Thread(MDR).start();
 
-        storage = new Storage(1000);
+        storage = new Storage(10);
     }
 
     private static void createDir(){

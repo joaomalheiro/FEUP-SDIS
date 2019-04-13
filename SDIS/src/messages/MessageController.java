@@ -60,7 +60,11 @@ public class MessageController implements Runnable {
 	}
 
     private void handleRemoved() {
+        String fileId = header[3];
+        int chunkNumber = Integer.parseInt(header[4]);
 	    System.out.println(header[0] + " " + header[1] + " " + header[2] + " " + header[3]);
+	    Peer.getMC().getRepDegreeStorage().removeChunkReplication(fileId,chunkNumber,Integer.parseInt(Peer.getPeerId()));
+
     }
 
     private void handleDelete() {
@@ -134,7 +138,7 @@ public class MessageController implements Runnable {
 		String fileId = header[3];
 		int chunkNumber = Integer.parseInt(header[4]);
         System.out.println("STORED " + version + " " + senderId + " " + fileId + " " + chunkNumber);
-		Peer.getMC().saveChunkReplication(fileId, chunkNumber, senderId);
+		Peer.getMC().getRepDegreeStorage().saveChunkReplication(fileId, chunkNumber, senderId);
 
 
 	}

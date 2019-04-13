@@ -30,7 +30,7 @@ public class ResponseHandler implements Runnable{
                 e.printStackTrace();
             }
 
-            stored = Peer.getMC().getRepDegree(key);
+            stored = Peer.getMC().getRepDegreeStorage().getRepDegree(key);
             if(stored == repDegree){
                 return;
             }
