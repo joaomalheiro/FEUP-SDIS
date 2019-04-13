@@ -29,7 +29,7 @@ public class FileHandler {
             String key = "fileId" +  Message.encrypt(file.getName() + file.lastModified()) + "chkn" + header[4];
             System.out.println("Sending " + key);
             Peer.getMC().getRepDegreeStorage().setDesiredRepDegree(Message.encrypt(file.getName() + file.lastModified()),repDegree);
-            ResponseHandler resp = new ResponseHandler(Integer.parseInt(header[5]), key);
+            ResponseHandler resp = new ResponseHandler(Integer.parseInt(header[5]), key,msg);
             new Thread(resp).start();
 
             i++;

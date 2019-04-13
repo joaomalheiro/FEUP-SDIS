@@ -63,7 +63,19 @@ public class MessageController implements Runnable {
         String fileId = header[3];
         int chunkNumber = Integer.parseInt(header[4]);
 	    System.out.println(header[0] + " " + header[1] + " " + header[2] + " " + header[3]);
-		Peer.getMC().getRepDegreeStorage().removeChunkReplication(fileId,chunkNumber,Integer.parseInt(header[2]));
+        File f = new File("./peerDisk/peer" + Peer.getPeerId() + "/backup/" + fileId + "/chk" + chunkNumber);
+        if(f.exists() && !f.isDirectory()) {
+            Chunk chunk = null;
+            try {
+                chunk = loadChunk(fileId, chunkNumber);
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+           Peer.getMC().getRepDegreeStorage().removeChunkReplication(fileId,chunkNumber,Integer.parseInt(header[2]),chunk.getData());
+        }
+
 
     }
 
@@ -169,6 +181,7 @@ public class MessageController implements Runnable {
 		String s = new String(newChunk.getData());
 		System.out.println(s);
 
+		Peer.getMC().getRepDegreeStorage().saveChunkReplication(fileId, chunkNumber, Integer.parseInt(Peer.getPeerId()));
         Peer.getMC().getRepDegreeStorage().setDesiredRepDegree(fileId,replicationDeg);
 		sendStored(fileId, chunkNumber, replicationDeg);
 	}
@@ -222,7 +235,7 @@ public class MessageController implements Runnable {
 
 	}
 
-	private void sendChunk(Chunk chunk){
+	public static void sendChunk(Chunk chunk){
 		Message responseMsg = new Message("1.0", Integer.parseInt(Peer.getPeerId()), chunk.getFileId(), chunk.getChunkNumber(), 0,chunk.getData());
 		byte[] response = responseMsg.createChunk();
 		System.out.println(chunk.getData().length);

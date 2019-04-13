@@ -1,10 +1,12 @@
 package channel;
 
 import files.ResponseHandler;
+import messages.Message;
 import peer.Peer;
 import protocols.Chunk;
 
 import java.io.*;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.concurrent.TimeUnit;
@@ -27,7 +29,7 @@ public class RepDegreeStorage implements Serializable{
 
     }
 
-    public void removeChunkReplication(String fileId,int chunkNumber,int peerId){
+    public void removeChunkReplication(String fileId,int chunkNumber,int peerId,byte[] data){
         String key = "fileId" + fileId + "chkn" + chunkNumber;
         if (repDegree.containsKey(key)){
             repDegree.get(key).remove(peerId);
@@ -39,7 +41,8 @@ public class RepDegreeStorage implements Serializable{
                     e.printStackTrace();
                 }
                 if(getRepDegree(key) < getDesiredRepDegree(fileId)) {
-                    ResponseHandler resp = new ResponseHandler(getDesiredRepDegree(fileId), key);
+                    Message msg = new Message("1.0", Integer.parseInt(Peer.getPeerId()),  fileId, chunkNumber, getDesiredRepDegree(fileId), data);
+                    ResponseHandler resp = new ResponseHandler(getDesiredRepDegree(fileId), key,msg);
                     new Thread(resp).start();
                 }
             }

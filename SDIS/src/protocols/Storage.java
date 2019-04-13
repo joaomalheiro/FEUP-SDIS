@@ -50,6 +50,7 @@ public class Storage {
 
     public void setSpaceReserved(long spaceReserved) {
         this.spaceReserved = spaceReserved;
+        updateSpaceOcupied();
         if(this.spaceReserved < this.spaceOcupied){
             clearStorageSpace();
         }
