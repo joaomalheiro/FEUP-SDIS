@@ -23,7 +23,7 @@ public class FileHandler {
         //System.out.println(file.length());
 
         while((length = stream.read(data)) > 0) {
-
+            //System.out.println(file.getName() + " put" + file.lastModified());
             Message msg = new Message("1.0", Integer.parseInt(Peer.getPeerId()),  file.getName() + file.lastModified(), i, repDegree, Arrays.copyOf(data,length));
             String[] header = msg.createPutChunk();
             String key = "fileId" +  Message.encrypt(file.getName() + file.lastModified()) + "chkn" + header[4];

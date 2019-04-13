@@ -3,10 +3,7 @@ package peer;
 import channel.MultiCast;
 import files.FileHandler;
 import messages.Message;
-import protocols.Backup;
-import protocols.Reclaim;
-import protocols.Restore;
-import protocols.Storage;
+import protocols.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -116,7 +113,8 @@ public class Peer  implements RMIStub {
 
     @Override
     public void deleteProtocol(String file) {
-
+        Delete delete = new Delete(file);
+        delete.run();
     }
     @Override
     public void reclaimProtocol(int reservedSpace) {

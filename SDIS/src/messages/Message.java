@@ -103,7 +103,7 @@ public class Message {
 	
 	public void createDelete() {
 
-		String header = "DELETE" + " " + this.version + " " + this.senderId + " " + encrypt(this.fileId) + messageEnd;
+		String header = new String("DELETE" + " " + this.version + " " + this.senderId + " " + encrypt(this.fileId) + messageEnd);
 
 		Peer.getMC().sendMsg(header.getBytes());
  	}

@@ -50,6 +50,7 @@ public class MessageController implements Runnable {
 				break;
             case "DELETE":
                 handleDelete();
+                break;
             case "REMOVED":
                 handleRemoved();
 			default:
@@ -68,9 +69,9 @@ public class MessageController implements Runnable {
             try {
                 chunk = loadChunk(fileId, chunkNumber);
             } catch (IOException e) {
-                e.printStackTrace();
+
             } catch (ClassNotFoundException e) {
-                e.printStackTrace();
+
             }
            Peer.getMC().getRepDegreeStorage().removeChunkReplication(fileId,chunkNumber,Integer.parseInt(header[2]),chunk.getData());
         }
@@ -83,11 +84,11 @@ public class MessageController implements Runnable {
         String fileId = header[3];
 
         File directory = new File("./peerDisk/peer" + Peer.getPeerId() + "/backup/" + fileId);
-
+		System.out.println(header[0] + " " + header[1] + " " + header[2] + " " + header[3]);
         if(!directory.exists()){
 
             System.out.println("Directory does not exist.");
-            System.exit(0);
+            return;
 
         }else{
 
@@ -97,7 +98,7 @@ public class MessageController implements Runnable {
 
             }catch(IOException e){
                 e.printStackTrace();
-                System.exit(0);
+                return;
             }
         }
 
