@@ -38,8 +38,10 @@ public class RepDegreeStorage implements Serializable{
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                ResponseHandler resp = new ResponseHandler(getDesiredRepDegree(fileId), key);
-                new Thread(resp).start();
+                if(getRepDegree(key) < getDesiredRepDegree(fileId)) {
+                    ResponseHandler resp = new ResponseHandler(getDesiredRepDegree(fileId), key);
+                    new Thread(resp).start();
+                }
             }
         }
         this.saveRepDegreeStorage();
