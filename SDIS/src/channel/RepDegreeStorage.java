@@ -12,6 +12,7 @@ import java.util.concurrent.TimeUnit;
 public class RepDegreeStorage implements Serializable{
     private HashMap<String,HashSet<Integer>> repDegree = new HashMap<>();
     private HashMap<String,Integer> desiredRepDegree = new HashMap<>();
+    private HashSet<Message> deleteMessages = new HashSet<>();
 
 
     public void saveChunkReplication(String fileId,int chunkNumber,int peerId){
@@ -73,6 +74,16 @@ public class RepDegreeStorage implements Serializable{
             fileOut.close();
         } catch (IOException i) {
             i.printStackTrace();
+        }
+    }
+
+    public void addDeleteMessage(Message msg){
+        deleteMessages.add(msg);
+    }
+
+    public void sendAllDeleteMessages(){
+        for (Message m : deleteMessages) {
+            m.sendDelete();
         }
     }
 }
