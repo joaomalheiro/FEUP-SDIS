@@ -1,8 +1,6 @@
 package peer;
 
 import channel.MultiCast;
-import files.FileHandler;
-import messages.Message;
 import protocols.*;
 
 import java.io.File;
@@ -10,7 +8,6 @@ import java.io.IOException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.Scanner;
 
 public class Peer  implements RMIStub {
 
@@ -73,10 +70,6 @@ public class Peer  implements RMIStub {
         String restoreDirNam = "peerDisk/peer" + peerId + "/restored";
         new File("./" + backupDirName).mkdirs();
         new File("./" + restoreDirNam).mkdirs();
-
-    }
-
-    private static void initPeer(String args[]){
 
     }
 

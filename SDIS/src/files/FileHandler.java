@@ -14,8 +14,6 @@ public class FileHandler {
 
         byte[] data = new byte[1000 * 64];
 
-        file.length();
-
         FileInputStream stream = new FileInputStream(file);
         int i = 0;
         int length;

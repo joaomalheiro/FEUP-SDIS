@@ -35,7 +35,7 @@ public class Storage {
             }
         }
         catch (NullPointerException e) {
-
+            System.out.println("Null Pointer Exception in FolderSize exception");
         }
         return length;
     }
@@ -43,9 +43,6 @@ public class Storage {
     public boolean allowChunk(byte[] chunkData){
         updateSpaceOcupied();
         return spaceOcupied + (chunkData.length / 1024) < spaceReserved;
-    }
-    public long getSpaceReserved() {
-        return spaceReserved;
     }
 
     public void setSpaceReserved(long spaceReserved) {
@@ -65,7 +62,7 @@ public class Storage {
                 }
             }
             catch (NullPointerException e) {
-
+                System.out.println("Null Pointer Exception in clearStorageSpace exception");
             }
     }
 
@@ -129,9 +126,4 @@ public class Storage {
 
     }
 
-
-    public long getSpaceOcupied() {
-        updateSpaceOcupied();
-        return spaceOcupied;
-    }
 }

@@ -1,9 +1,5 @@
 package protocols;
 
-import java.io.File;
-import java.io.IOException;
-
-import files.FileHandler;
 import peer.Peer;
 
 

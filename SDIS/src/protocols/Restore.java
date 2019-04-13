@@ -9,7 +9,6 @@ import java.util.HashMap;
 
 public class Restore implements Runnable {
     private String fileName;
-    private String fileId;
     private File file;
 
     public Restore(String fileName){
@@ -23,7 +22,7 @@ public class Restore implements Runnable {
 
         file = new File("./testFiles/" + fileName);
         int nChunks = (int)file.length() / 64000 + 1;
-        fileId = Message.encrypt(file.getName() + file.lastModified());
+        String fileId = Message.encrypt(file.getName() + file.lastModified());
 
         Peer.getMDR().insertFileId(fileId);
 

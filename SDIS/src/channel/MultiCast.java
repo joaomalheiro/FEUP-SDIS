@@ -1,15 +1,12 @@
 package channel;
 
-import files.ResponseHandler;
 import messages.MessageController;
-import org.omg.Messaging.SYNC_WITH_TRANSPORT;
 import peer.Peer;
 import protocols.Chunk;
 
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.io.Serializable;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
@@ -40,7 +37,7 @@ public class MultiCast implements Runnable{
         this.repDegreeStorage = (RepDegreeStorage) in.readObject();
         in.close();
         fileIn.close();
-        } catch (IOException e) {
+        } catch (IOException ignored) {
 
         }
     }

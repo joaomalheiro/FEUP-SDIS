@@ -3,10 +3,8 @@ package channel;
 import files.ResponseHandler;
 import messages.Message;
 import peer.Peer;
-import protocols.Chunk;
 
 import java.io.*;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.concurrent.TimeUnit;

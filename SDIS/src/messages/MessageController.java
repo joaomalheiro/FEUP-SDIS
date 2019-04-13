@@ -68,9 +68,9 @@ public class MessageController implements Runnable {
             Chunk chunk = null;
             try {
                 chunk = loadChunk(fileId, chunkNumber);
-            } catch (IOException e) {
+            } catch (IOException ignored) {
 
-            } catch (ClassNotFoundException e) {
+            } catch (ClassNotFoundException ignored) {
 
             }
            Peer.getMC().getRepDegreeStorage().removeChunkReplication(fileId,chunkNumber,Integer.parseInt(header[2]),chunk.getData());
@@ -88,24 +88,13 @@ public class MessageController implements Runnable {
         if(!directory.exists()){
 
             System.out.println("Directory does not exist.");
-            return;
 
         }else{
-
-            try{
-
-                delete(directory);
-
-            }catch(IOException e){
-                e.printStackTrace();
-                return;
-            }
+            delete(directory);
         }
-
-
     }
 
-    private void delete(File file) throws IOException{
+    private void delete(File file) {
         if(file.isDirectory()){
 
             //directory is empty, then delete it

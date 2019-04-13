@@ -1,20 +1,14 @@
 package files;
 
-import java.io.IOException;
-import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
-import channel.MultiCast;
 import messages.Message;
-import messages.MessageController;
 import peer.Peer;
-import protocols.Chunk;
 
 public class ResponseHandler implements Runnable{
 
     private long wait_time = 1;
     private int tries = 0;
-    private int stored = 0;
     private int repDegree;
     private Message msg;
 
@@ -30,7 +24,7 @@ public class ResponseHandler implements Runnable{
 
     @Override
     public void run() {
-        stored = Peer.getMC().getRepDegreeStorage().getRepDegree(key);
+        int stored = Peer.getMC().getRepDegreeStorage().getRepDegree(key);
         do {
             //System.out.println(repDegree + "rep" + stored + "stored");
             try {
@@ -48,7 +42,7 @@ public class ResponseHandler implements Runnable{
             msg.createPutChunk();
             tries++;
 
-        }while(stored<repDegree || tries !=5);
+        }while(stored <repDegree || tries !=5);
 
     }
 
