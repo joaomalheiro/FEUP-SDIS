@@ -36,17 +36,20 @@ public class Peer  implements RMIStub {
 
         RMIStub stub = null;
 
+        Peer peer = new Peer();
+        stub = (RMIStub) UnicastRemoteObject.exportObject(peer, 0);
+
         //RUN IN TERMINAL rmiregistry &
         try {
-            Peer peer = new Peer();
-            stub = (RMIStub) UnicastRemoteObject.exportObject(peer, 0);
-
             Registry reg = LocateRegistry.getRegistry();
             reg.rebind(Peer.getPeerId(), stub);
 
-            System.out.println("Peer connected");
+            System.out.println("Peer connected through getRegistry");
         } catch (Exception e) {
-            e.printStackTrace();
+            Registry reg = LocateRegistry.createRegistry(1099);
+            reg.rebind(Peer.getPeerId(), stub);
+
+            System.out.println("Peer connected through createRegistry");
         }
 
             while(true) {
