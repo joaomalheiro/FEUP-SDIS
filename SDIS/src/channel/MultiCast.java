@@ -23,6 +23,8 @@ public class MultiCast implements Runnable{
     public int multCast_port;
 
     private RepDegreeStorage repDegreeStorage = new RepDegreeStorage();
+    private HashMap<String,HashSet<Integer>> repDegree = new HashMap<>();
+    private HashMap<String,HashMap<Integer,Chunk>> restoredChunks = new HashMap<>();
 
 
     public MultiCast(String address, String port) throws IOException, ClassNotFoundException {
@@ -74,5 +76,37 @@ public class MultiCast implements Runnable{
         return repDegreeStorage;
     }
 
+    public void saveChunkReplication(String fileId,int chunkNumber,int peerId){
+        String key = "";
+
+        key = "fileId" + fileId + "chkn" + chunkNumber;
+        System.out.println("Storing" + key + "in" + peerId);
+        if (!repDegree.containsKey(key)){
+            repDegree.put(key, new HashSet<>());
+        }
+        repDegree.get(key).add(peerId);
+
+    }
+
+    public int getRepDegree(String key){
+        return repDegree.get(key).size();
+    }
+
+    public HashMap<Integer,Chunk> getChunksFromFile(String fileId){
+        if(restoredChunks.containsKey(fileId)) {
+            return restoredChunks.get(fileId);
+        } else return null;
+    }
+
+    public void insertFileId(String fileId){
+        restoredChunks.put(fileId, new HashMap<>());
+    }
+
+    public void insertChunk(Chunk chunk, String fileId){
+        if(restoredChunks.containsKey(fileId)) {
+            restoredChunks.get(fileId).put(chunk.getChunkNumber(), chunk);
+        }
+
+    }
 
 }
