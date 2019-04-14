@@ -31,6 +31,8 @@ public class FileHandler {
             Message msg = new Message("1.0", Integer.parseInt(Peer.getPeerId()),  file.getName() + file.lastModified(), i, repDegree, Arrays.copyOf(data,length));
             String[] header = msg.createPutChunk();
 
+            Peer.getStorage().insertHashtable(i,repDegree);
+
             String key = "fileId" +  Message.encrypt(file.getName() + file.lastModified()) + "chkn" + header[4];
             Peer.getMC().getRepDegreeStorage().setDesiredRepDegree(Message.encrypt(file.getName() + file.lastModified()),repDegree);
             ResponseHandler resp = new ResponseHandler(Integer.parseInt(header[5]), key,msg);

@@ -117,8 +117,8 @@ public class Peer  implements RMIStub {
     }
 
     @Override
-    public void stateProtocol() throws RemoteException {
+    public String stateProtocol() {
         State state = new State();
-        state.run();
+        return state.run();
     }
 }

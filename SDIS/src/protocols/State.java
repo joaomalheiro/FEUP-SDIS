@@ -3,28 +3,38 @@ package protocols;
 import peer.Peer;
 
 import java.io.File;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.Map;
 
-public class State implements Runnable {
+public class State {
 
-    @Override
-    public void run() {
 
-        System.out.println("Space Reserved:" + Peer.getStorage().getSpaceReserved());
-        System.out.println("Space Occupied by chunks:" + Peer.getStorage().getSpaceOcupied());
+    public String run() {
 
+        String state = "";
+        state = "Space Reserved: " + Peer.getStorage().getSpaceReserved() + "\n" + "Space occupied by chunks: " + Peer.getStorage().getSpaceOcupied() + "\n";
         File peerFolder = new File("./peerDisk/peer" + Peer.getPeerId() + "/backup");
 
         for(int i = 0; i < peerFolder.listFiles().length; i++) {
-            System.out.println("File " + i);
-            System.out.println("Absolute Filepath : " + peerFolder.listFiles()[i].getAbsolutePath());
-            System.out.println("Backup service id of the file : " + peerFolder.listFiles()[i].getName());
+            state = state + "File number: " + i + "\n";
+            state = state + "Absolute Filepath : " + peerFolder.listFiles()[i].getAbsolutePath() + "\n";
+            state = state + "Backup service id of the file : " + peerFolder.listFiles()[i].getName() + "\n";
 
             for(int j = 0; j < peerFolder.listFiles()[i].listFiles().length; j++) {
-                System.out.println("    ChunkID: " + peerFolder.listFiles()[i].listFiles()[j].getName());
-                System.out.println("    Chunk size: " + peerFolder.listFiles()[i].listFiles()[j].length());
-                System.out.println("    Perceived Rep Degree: " + Peer.getMC().getRepDegreeStorage().getRepDegree(peerFolder.listFiles()[i].listFiles()[j].getName()));
+                state = state + "   ChunkID: " + peerFolder.listFiles()[i].listFiles()[j].getName() + "\n";
+                state = state + "   Chunk size: " + peerFolder.listFiles()[i].listFiles()[j].length() + "\n";
+                state = state + "   Perceived Rep Degree: " + Peer.getMC().getRepDegreeStorage().getRepDegree(peerFolder.listFiles()[i].listFiles()[j].getName()) + "\n";
             }
         }
 
+        state += "Chunks that Peer " + Peer.getPeerId() + " has initiated backup protocol: ";
+        Iterator it = Peer.getStorage().getHashtable().entrySet().iterator();
+        while(it.hasNext()) {
+            Map.Entry pair = (Map.Entry) it.next();
+            state += "   ChunkID: " + pair.getKey() + "\n" + "   RepDegree: " + pair.getValue() + "\n";
+        }
+
+        return state;
     }
 }

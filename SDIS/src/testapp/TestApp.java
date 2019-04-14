@@ -40,7 +40,7 @@ public class TestApp {
                 stub.reclaimProtocol(Integer.parseInt(operand1));
                 break;
             case "STATE":
-                stub.stateProtocol();
+                System.out.println(stub.stateProtocol());
                 break;
 
         }

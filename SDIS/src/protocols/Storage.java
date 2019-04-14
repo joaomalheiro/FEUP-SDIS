@@ -5,10 +5,12 @@ import messages.Message;
 import peer.Peer;
 
 import java.io.File;
+import java.util.Hashtable;
 
 public class Storage {
     private long spaceReserved;
     private long spaceOcupied;
+    private Hashtable<Integer,Integer> initBackupChunks;
 
     public Storage(long spaceReserved){
         this.spaceReserved = spaceReserved;
@@ -16,6 +18,12 @@ public class Storage {
         if(this.spaceReserved < this.spaceOcupied){
             clearStorageSpace();
         }
+
+        initBackupChunks = new Hashtable<>();
+    }
+
+    public void insertHashtable(Integer chunkId, Integer repDegree) {
+        initBackupChunks.put(chunkId, repDegree);
     }
 
     public long getSpaceReserved() {
@@ -134,4 +142,7 @@ public class Storage {
 
     }
 
+    public Hashtable<Integer, Integer> getHashtable() {
+        return initBackupChunks;
+    }
 }
