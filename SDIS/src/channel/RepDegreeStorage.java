@@ -61,7 +61,7 @@ public class RepDegreeStorage implements Serializable{
     }
 
     public void setDesiredRepDegree(String key, int replicationDegree){
-        desiredRepDegree.put(key, replicationDegree);
+        desiredRepDegree.put(key, new Integer(replicationDegree));
         this.saveRepDegreeStorage();
     }
 
