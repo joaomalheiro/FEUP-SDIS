@@ -8,11 +8,12 @@ import java.io.*;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
 public class RepDegreeStorage implements Serializable{
-    private Map<String,HashSet<Integer>> repDegree = new HashMap<>();
-    private Map<String,Integer> desiredRepDegree = new HashMap<>();
+    private Map<String,HashSet<Integer>> repDegree = new ConcurrentHashMap<>();
+    private Map<String,Integer> desiredRepDegree = new ConcurrentHashMap<>();
     private HashSet<Message> deleteMessages = new HashSet<>();
 
     public void saveChunkReplication(String fileId,int chunkNumber,int peerId){
