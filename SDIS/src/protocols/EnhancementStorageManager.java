@@ -20,7 +20,7 @@ public class EnhancementStorageManager implements Runnable {
     @Override
     public void run() {
         while (true) {
-            long wait_time = (long) (Math.random() * (50000 - 1)) + 1;
+            long wait_time = (long) (Math.random() * (50000 - 100)) + 100;
             try {
                 TimeUnit.MILLISECONDS.sleep(wait_time);
             } catch (InterruptedException e) {

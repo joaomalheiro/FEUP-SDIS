@@ -60,8 +60,10 @@ public class Peer  implements RMIStub {
         new Thread(MDB).start();
         new Thread(MDR).start();
 
-        //EnhancementStorageManager test = new EnhancementStorageManager();
-        //new Thread(test).start();
+        if(protocolVersion.equals("2.0")) {
+            EnhancementStorageManager test = new EnhancementStorageManager();
+            new Thread(test).start();
+        }
 
         MC.sendMsg(new String("JOINED " + Peer.getProtocolVersion() + " " + Peer.getPeerId()).getBytes());
 
