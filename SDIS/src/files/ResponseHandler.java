@@ -40,7 +40,7 @@ public class ResponseHandler implements Runnable{
             }
 
             stored = Peer.getMC().getRepDegreeStorage().getRepDegree(key);
-            if(stored == repDegree){
+            if(stored >= repDegree){
                 return;
             }
             wait_time *=2;

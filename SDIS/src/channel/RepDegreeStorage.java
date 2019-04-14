@@ -7,11 +7,12 @@ import peer.Peer;
 import java.io.*;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public class RepDegreeStorage implements Serializable{
-    private HashMap<String,HashSet<Integer>> repDegree = new HashMap<>();
-    private HashMap<String,Integer> desiredRepDegree = new HashMap<>();
+    private Map<String,HashSet<Integer>> repDegree = new HashMap<>();
+    private Map<String,Integer> desiredRepDegree = new HashMap<>();
     private HashSet<Message> deleteMessages = new HashSet<>();
 
     public void saveChunkReplication(String fileId,int chunkNumber,int peerId){
@@ -84,5 +85,12 @@ public class RepDegreeStorage implements Serializable{
         for (Message m : deleteMessages) {
             m.sendDelete();
         }
+    }
+
+    public Map<String,Integer> getDesiredHashMap(){
+        return desiredRepDegree;
+    }
+    public Map<String,HashSet<Integer>> getRepDegreeHashMap(){
+        return repDegree;
     }
 }
