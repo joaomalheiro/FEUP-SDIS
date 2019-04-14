@@ -143,13 +143,17 @@ public class MessageController implements Runnable {
                     //recursive delete
                     delete(fileDelete);
                 }
-
+				try{
                 //check the directory again, if empty then delete it
                 if(file.list().length==0){
                     file.delete();
                     System.out.println("Directory is deleted : "
                             + file.getAbsolutePath());
                 }
+				} catch(Exception ignore){
+				
+				}
+				
             }
 
         }else{
