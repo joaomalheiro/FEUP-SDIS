@@ -183,7 +183,7 @@ public class MessageController implements Runnable {
 		String fileId = header[3];
 		int chunkNumber = Integer.parseInt(header[4]);
 		int replicationDeg = Integer.parseInt(header[5]);
-        System.out.println("PUTCHUNK " + fileId + " " + chunkNumber + " " + replicationDeg);
+        System.out.println("PUTCHUNK " + header[2] + " " + fileId + " " + chunkNumber + " " + replicationDeg);
 
        /* if(header[1].equals("2.0")){
             if(Peer.getMC().getRepDegreeStorage().getDesiredRepDegree(fileId) <= Peer.getMC().getRepDegreeStorage().getRepDegree("fileId" + fileId + "chkn" + chunkNumber)){

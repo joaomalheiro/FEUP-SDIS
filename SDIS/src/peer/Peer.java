@@ -46,7 +46,7 @@ public class Peer  implements RMIStub {
             System.out.println("Peer connected through getRegistry");
         } catch (Exception e) {
             Registry reg = LocateRegistry.createRegistry(1099);
-            reg.rebind(Peer.getPeerId(), stub);
+            reg.rebind(peerAcessPoint, stub);
 
             System.out.println("Peer connected through createRegistry");
         }
