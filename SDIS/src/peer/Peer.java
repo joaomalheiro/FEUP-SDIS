@@ -1,6 +1,8 @@
 package peer;
 
 import channel.MultiCast;
+import messages.Message;
+import messages.MessageController;
 import protocols.*;
 
 import java.io.File;
@@ -9,6 +11,7 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.HashSet;
 
 public class Peer  implements RMIStub {
 
@@ -19,6 +22,8 @@ public class Peer  implements RMIStub {
     private static MultiCast MDB;
     private static MultiCast MDR;
     private static Storage storage;
+
+    private static HashSet<File> filesInitiated = new HashSet<>();
 
     //1 2 1 230.0.0.0 4446 225.0.0.0 5000 229.0.0.0 4450
 
@@ -101,10 +106,16 @@ public class Peer  implements RMIStub {
         return storage;
     }
 
+    public static HashSet<File> getFilesInitiated() {
+        return filesInitiated;
+    }
+
     @Override
     public void backupProtocol(String file, int replicationDeg) {
         Backup backup = new Backup(file, replicationDeg);
         backup.run();
+        File init = new File("./testFiles/" + file);
+        this.filesInitiated.add(init);
     }
 
     @Override

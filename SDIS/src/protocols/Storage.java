@@ -51,7 +51,6 @@ public class Storage {
             }
         }
         catch (NullPointerException e) {
-            System.out.println("Null Pointer Exception in FolderSize exception");
         }
         return length;
     }
@@ -78,7 +77,6 @@ public class Storage {
                 }
             }
             catch (NullPointerException e) {
-                System.out.println("Null Pointer Exception in clearStorageSpace exception");
             }
     }
 

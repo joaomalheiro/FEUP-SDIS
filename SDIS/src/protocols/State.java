@@ -1,5 +1,6 @@
 package protocols;
 
+import messages.Message;
 import peer.Peer;
 
 import java.io.File;
@@ -19,20 +20,27 @@ public class State {
         for(int i = 0; i < peerFolder.listFiles().length; i++) {
             state = state + "File number: " + i + "\n";
             state = state + "Absolute Filepath : " + peerFolder.listFiles()[i].getAbsolutePath() + "\n";
-            state = state + "Backup service id of the file : " + peerFolder.listFiles()[i].getName() + "\n";
 
             for(int j = 0; j < peerFolder.listFiles()[i].listFiles().length; j++) {
                 state = state + "   ChunkID: " + peerFolder.listFiles()[i].listFiles()[j].getName() + "\n";
                 state = state + "   Chunk size: " + peerFolder.listFiles()[i].listFiles()[j].length() + "\n";
-                state = state + "   Perceived Rep Degree: " + Peer.getMC().getRepDegreeStorage().getRepDegree(peerFolder.listFiles()[i].listFiles()[j].getName()) + "\n";
+                state = state + "   Perceived Rep Degree: " + Peer.getMC().getRepDegreeStorage().getRepDegree("fileId" + peerFolder.listFiles()[i].getName() + "chkn" + peerFolder.listFiles()[i].listFiles()[j].getName().replace("chk","")) + "\n";
             }
         }
 
         state += "Chunks that Peer " + Peer.getPeerId() + " has initiated backup protocol: ";
-        Iterator it = Peer.getStorage().getHashtable().entrySet().iterator();
+        Iterator it = Peer.getFilesInitiated().iterator();
         while(it.hasNext()) {
-            Map.Entry pair = (Map.Entry) it.next();
-            state += "   ChunkID: " + pair.getKey() + "\n" + "   RepDegree: " + pair.getValue() + "\n";
+            File file = (File) it.next();
+            state += "File pathname: " + file.getAbsolutePath() + " \n";
+            state += "FileId with hash: " + Message.encrypt(file.getName() + file.lastModified()) + " \n";
+            state += "Desired repDegree: " + Peer.getMC().getRepDegreeStorage().getDesiredRepDegree(Message.encrypt(file.getName() + file.lastModified())) + " \n";
+            int chkn = 0;
+            while(Peer.getMC().getRepDegreeStorage().existsRepDegree("fileId" + Message.encrypt(file.getName() + file.lastModified()) + "chkn" + chkn)){
+                state += "    ChunkId: " + chkn + " Perceived repDegree: " + Peer.getMC().getRepDegreeStorage().getRepDegree("fileId" + Message.encrypt(file.getName() + file.lastModified()) + "chkn" + chkn) + "\n";
+                chkn++;
+            }
+
         }
 
         return state;

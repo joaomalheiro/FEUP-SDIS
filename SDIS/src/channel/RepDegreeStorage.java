@@ -57,12 +57,16 @@ public class RepDegreeStorage implements Serializable{
         return 0;
     }
 
+    public boolean existsRepDegree(String key){
+        return repDegree.containsKey(key);
+    }
+
     public int getDesiredRepDegree(String key){
         return desiredRepDegree.get(key);
     }
 
     public void setDesiredRepDegree(String key, int replicationDegree){
-        desiredRepDegree.put(key, new Integer(replicationDegree));
+        desiredRepDegree.put(key, replicationDegree);
         this.saveRepDegreeStorage();
     }
 

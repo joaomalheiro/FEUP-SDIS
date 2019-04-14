@@ -81,7 +81,6 @@ public class Message implements Serializable {
 	 * @return String[]
 	 */
 	public synchronized String[] createPutChunk() {
-		System.out.println(this.chunkNumber);
 		String header = new String("PUTCHUNK" + " " + this.version + " " + this.senderId + " " + encrypt(this.fileId) + " " + this.chunkNumber + " " + this.replicationDeg + messageEnd);
 		ByteArrayOutputStream outputMessageStream = new ByteArrayOutputStream();
 
@@ -131,8 +130,6 @@ public class Message implements Serializable {
 		String header = "CHUNK" + " " + this.version + " " + this.senderId + " " + this.fileId + " " + this.chunkNumber + messageEnd;
 		ByteArrayOutputStream outputMessageStream = new ByteArrayOutputStream();
 
-		System.out.println(this.body.length);
-
 		try {
 			outputMessageStream.write(Arrays.copyOf(header.getBytes(), header.length()));
 			outputMessageStream.write(Arrays.copyOf(this.body, this.body.length));
@@ -168,7 +165,7 @@ public class Message implements Serializable {
 	public void createRemoved() {
 
 		String header = "REMOVED" + " " + this.version + " " + this.senderId + " " + this.fileId + " " + this.chunkNumber + messageEnd;
-		//System.out.println(header);
+
 		Peer.getMC().sendMsg(header.getBytes());
 	}
 	
