@@ -131,7 +131,7 @@ public class Storage {
         int chunkNumber;
 
         //String[] path = absolutePath.split("\\\\");
-        String[] path = absolutePath.split("\/");
+        String[] path = absolutePath.split("");
         System.out.println(absolutePath);
         if(path[path.length - 1].contains("chk")){
             fileId = path[path.length - 2];

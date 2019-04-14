@@ -103,7 +103,7 @@ public class MessageController implements Runnable {
 
         File directory = new File("./peerDisk/peer" + Peer.getPeerId() + "/backup/" + fileId);
 		System.out.println(header[0] + " " + header[1] + " " + header[2] + " " + header[3]);
-		if(header[1] == "3.0") {
+		if(header[1].equals("3.0")) {
 			Message msg = new Message(Peer.getProtocolVersion(), Integer.parseInt(Peer.getPeerId()), fileId, 0, 0, null);
 			Peer.getMC().getRepDegreeStorage().addDeleteMessage(msg);
 		}
