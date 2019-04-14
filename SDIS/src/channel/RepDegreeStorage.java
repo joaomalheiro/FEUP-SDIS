@@ -85,6 +85,14 @@ public class RepDegreeStorage implements Serializable{
     public void addDeleteMessage(Message msg){
         deleteMessages.add(msg);
     }
+    public HashSet<Message> getDeleteMessages(){
+        return this.deleteMessages;
+    }
+    public void removeDeleteMessage(Message msg){
+        if(deleteMessages.contains(msg)){
+            deleteMessages.remove(msg);
+        }
+    }
 
     public void sendAllDeleteMessages(){
         for (Message m : deleteMessages) {

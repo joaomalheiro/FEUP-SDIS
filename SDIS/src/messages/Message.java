@@ -169,6 +169,9 @@ public class Message implements Serializable {
 		Peer.getMC().sendMsg(header.getBytes());
 	}
 	
+	public String getFileId() {
+		return this.fileId;
+	}
 	
 	
 	

@@ -5,6 +5,7 @@ import messages.Message;
 import messages.MessageController;
 import protocols.*;
 
+import java.util.Iterator;
 import java.io.File;
 import java.io.IOException;
 import java.rmi.RemoteException;
@@ -116,6 +117,16 @@ public class Peer  implements RMIStub {
         backup.run();
         File init = new File("./testFiles/" + file);
         this.filesInitiated.add(init);
+        if(protocolVersion.equals("3.0")){
+            Iterator<Message> it = Peer.getMC().getRepDegreeStorage().getDeleteMessages().iterator();
+            while(it.hasNext()){
+               Message msg = (Message) it.next();
+               if(msg.getFileId().equals(Message.encrypt(init.getName() + init.lastModified()))){
+                   it.remove();
+               }
+            }
+
+        }
     }
 
     @Override
@@ -128,6 +139,12 @@ public class Peer  implements RMIStub {
     public void deleteProtocol(String file) {
         Delete delete = new Delete(file);
         delete.run();
+        if(protocolVersion.equals("3.0")){
+        File init = new File("./testFiles/" + file);
+        Message msg = new Message(Peer.getProtocolVersion(), Integer.parseInt(Peer.getPeerId()),Message.encrypt(init.getName() + init.lastModified()), 0, 0, null);
+		Peer.getMC().getRepDegreeStorage().addDeleteMessage(msg);
+        }
+
     }
     @Override
     public void reclaimProtocol(int reservedSpace) {
