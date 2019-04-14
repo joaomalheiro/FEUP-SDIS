@@ -100,7 +100,12 @@ public class EnhancementStorageManager implements Runnable {
         String fileId;
         int chunkNumber;
 
-        String[] path = absolutePath.split("\\\\");
+        String[] path;
+        if(System.getProperty("os.name").equals("Linux")){
+            path = absolutePath.split("/");
+        } else {
+            path = absolutePath.split("\\\\");
+        }
         if(path[path.length - 1].contains("chk")){
             fileId = path[path.length - 2];
             chunkNumber = Integer.parseInt(path[path.length - 1].replace("chk",""));
