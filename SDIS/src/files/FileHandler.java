@@ -28,7 +28,7 @@ public class FileHandler {
 
         while((length = stream.read(data)) > 0) {
 
-            Message msg = new Message("1.0", Integer.parseInt(Peer.getPeerId()),  file.getName() + file.lastModified(), i, repDegree, Arrays.copyOf(data,length));
+            Message msg = new Message(Peer.getProtocolVersion(), Integer.parseInt(Peer.getPeerId()),  file.getName() + file.lastModified(), i, repDegree, Arrays.copyOf(data,length));
             String[] header = msg.createPutChunk();
 
             Peer.getStorage().insertHashtable(i,repDegree);
@@ -43,7 +43,7 @@ public class FileHandler {
         }
         if(file.length() % 64000 == 0) {
 
-            Message msg = new Message("1.0", Integer.parseInt(Peer.getPeerId()),  file.getName() + file.lastModified(), i, repDegree, null);
+            Message msg = new Message(Peer.getProtocolVersion(), Integer.parseInt(Peer.getPeerId()),  file.getName() + file.lastModified(), i, repDegree, null);
             String[] header = msg.createPutChunk();
 
             String key = "fileId" +  Message.encrypt(file.getName() + file.lastModified()) + "chkn" + header[4];

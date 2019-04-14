@@ -18,7 +18,7 @@ public class Delete implements Runnable {
     @Override
     public void run() {
         //System.out.println(file.getName() + " DELETE" + file.lastModified());
-        Message message = new Message("1.0", Integer.parseInt(Peer.getPeerId()),file.getName() + file.lastModified(),0,0,null);
+        Message message = new Message(Peer.getProtocolVersion(), Integer.parseInt(Peer.getPeerId()),file.getName() + file.lastModified(),0,0,null);
         message.createDelete();
     }
 

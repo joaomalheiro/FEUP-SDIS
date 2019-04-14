@@ -71,7 +71,9 @@ public class MessageController implements Runnable {
      * Handles a removed message received in the MultiCast Channel
      */
 	private void handleJoined() {
-		Peer.getMC().getRepDegreeStorage().sendAllDeleteMessages();
+		if(header[1] == "3.0") {
+			Peer.getMC().getRepDegreeStorage().sendAllDeleteMessages();
+		}
 	}
 
 	private void handleRemoved() {
@@ -101,8 +103,10 @@ public class MessageController implements Runnable {
 
         File directory = new File("./peerDisk/peer" + Peer.getPeerId() + "/backup/" + fileId);
 		System.out.println(header[0] + " " + header[1] + " " + header[2] + " " + header[3]);
-		Message msg = new Message("1.0",Integer.parseInt(Peer.getPeerId()),fileId,0,0,null);
-		Peer.getMC().getRepDegreeStorage().addDeleteMessage(msg);
+		if(header[1] == "3.0") {
+			Message msg = new Message(Peer.getProtocolVersion(), Integer.parseInt(Peer.getPeerId()), fileId, 0, 0, null);
+			Peer.getMC().getRepDegreeStorage().addDeleteMessage(msg);
+		}
 
         if(!directory.exists()){
 
@@ -177,7 +181,11 @@ public class MessageController implements Runnable {
 		int replicationDeg = Integer.parseInt(header[5]);
         System.out.println("PUTCHUNK " + fileId + " " + chunkNumber + " " + replicationDeg);
 
-
+       /* if(header[1].equals("2.0")){
+            if(Peer.getMC().getRepDegreeStorage().getDesiredRepDegree(fileId) <= Peer.getMC().getRepDegreeStorage().getRepDegree("fileId" + fileId + "chkn" + chunkNumber)){
+                return;
+            }
+        }*/
 		Chunk chunk = new Chunk(fileId,chunkNumber,replicationDeg, getDataFromPacket());
 
 		String fileIdDir = "peerDisk/peer" + Peer.getPeerId() + "/backup/" + fileId;
@@ -263,7 +271,7 @@ public class MessageController implements Runnable {
      * @param chunk
      */
 	public static void sendChunk(Chunk chunk){
-		Message responseMsg = new Message("1.0", Integer.parseInt(Peer.getPeerId()), chunk.getFileId(), chunk.getChunkNumber(), 0,chunk.getData());
+		Message responseMsg = new Message(Peer.getProtocolVersion(), Integer.parseInt(Peer.getPeerId()), chunk.getFileId(), chunk.getChunkNumber(), 0,chunk.getData());
 		byte[] response = responseMsg.createChunk();
 
 		try {
@@ -283,7 +291,7 @@ public class MessageController implements Runnable {
      */
 	private void sendStored(String fileId, int chunkNumber, int replicationDeg){
 
-		Message responseMsg = new Message("1.0", Integer.parseInt(Peer.getPeerId()), fileId, chunkNumber, replicationDeg, null);
+		Message responseMsg = new Message(Peer.getProtocolVersion(), Integer.parseInt(Peer.getPeerId()), fileId, chunkNumber, replicationDeg, null);
 		byte[] response = responseMsg.createStored();
 
 		try {

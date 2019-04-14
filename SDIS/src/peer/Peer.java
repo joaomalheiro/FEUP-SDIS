@@ -60,7 +60,12 @@ public class Peer  implements RMIStub {
         new Thread(MDB).start();
         new Thread(MDR).start();
 
-        MC.sendMsg(new String("JOINED 1.0 " + Peer.getPeerId()).getBytes());
+        if(protocolVersion.equals("2.0")) {
+            EnhancementStorageManager test = new EnhancementStorageManager();
+            new Thread(test).start();
+        }
+
+        MC.sendMsg(new String("JOINED " + Peer.getProtocolVersion() + " " + Peer.getPeerId()).getBytes());
 
         storage = new Storage(1000000);
     }
@@ -80,6 +85,9 @@ public class Peer  implements RMIStub {
 		return peerId;
 	}
 
+    public static String getProtocolVersion() {
+        return protocolVersion;
+    }
 
     public static MultiCast getMDR() {
         return MDR;

@@ -26,7 +26,7 @@ public class Restore implements Runnable {
 
         for (int i = 0 ; i < nChunks; i++){
 
-            Message msg = new Message("1.0", Integer.parseInt(Peer.getPeerId()), file.getName() + file.lastModified(), i, 0 , null);
+            Message msg = new Message(Peer.getProtocolVersion(), Integer.parseInt(Peer.getPeerId()), file.getName() + file.lastModified(), i, 0 , null);
             msg.createGetChunk();
         }
 

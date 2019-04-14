@@ -7,11 +7,12 @@ import peer.Peer;
 import java.io.*;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public class RepDegreeStorage implements Serializable{
-    private HashMap<String,HashSet<Integer>> repDegree = new HashMap<>();
-    private HashMap<String,Integer> desiredRepDegree = new HashMap<>();
+    private Map<String,HashSet<Integer>> repDegree = new HashMap<>();
+    private Map<String,Integer> desiredRepDegree = new HashMap<>();
     private HashSet<Message> deleteMessages = new HashSet<>();
 
     public void saveChunkReplication(String fileId,int chunkNumber,int peerId){
@@ -39,7 +40,7 @@ public class RepDegreeStorage implements Serializable{
                     e.printStackTrace();
                 }
                 if(getRepDegree(key) < getDesiredRepDegree(fileId)) {
-                    Message msg = new Message("1.0", Integer.parseInt(Peer.getPeerId()),  fileId, chunkNumber, getDesiredRepDegree(fileId), data);
+                    Message msg = new Message(Peer.getProtocolVersion(), Integer.parseInt(Peer.getPeerId()),  fileId, chunkNumber, getDesiredRepDegree(fileId), data);
                     ResponseHandler resp = new ResponseHandler(getDesiredRepDegree(fileId), key,msg);
                     new Thread(resp).start();
                 }
@@ -84,5 +85,12 @@ public class RepDegreeStorage implements Serializable{
         for (Message m : deleteMessages) {
             m.sendDelete();
         }
+    }
+
+    public Map<String,Integer> getDesiredHashMap(){
+        return desiredRepDegree;
+    }
+    public Map<String,HashSet<Integer>> getRepDegreeHashMap(){
+        return repDegree;
     }
 }

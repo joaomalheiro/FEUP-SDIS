@@ -32,7 +32,7 @@ public class ResponseHandler implements Runnable{
     public void run() {
         int stored = Peer.getMC().getRepDegreeStorage().getRepDegree(key);
         do {
-            //System.out.println(repDegree + "rep" + stored + "stored");
+            System.out.println(repDegree + "rep" + stored + "stored");
             try {
                 TimeUnit.SECONDS.sleep(wait_time);
             } catch (InterruptedException e) {
@@ -40,7 +40,7 @@ public class ResponseHandler implements Runnable{
             }
 
             stored = Peer.getMC().getRepDegreeStorage().getRepDegree(key);
-            if(stored == repDegree){
+            if(stored >= repDegree){
                 return;
             }
             wait_time *=2;
