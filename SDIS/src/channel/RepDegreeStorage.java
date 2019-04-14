@@ -39,7 +39,7 @@ public class RepDegreeStorage implements Serializable{
                     e.printStackTrace();
                 }
                 if(getRepDegree(key) < getDesiredRepDegree(fileId)) {
-                    Message msg = new Message("1.0", Integer.parseInt(Peer.getPeerId()),  fileId, chunkNumber, getDesiredRepDegree(fileId), data);
+                    Message msg = new Message(Peer.getProtocolVersion(), Integer.parseInt(Peer.getPeerId()),  fileId, chunkNumber, getDesiredRepDegree(fileId), data);
                     ResponseHandler resp = new ResponseHandler(getDesiredRepDegree(fileId), key,msg);
                     new Thread(resp).start();
                 }
