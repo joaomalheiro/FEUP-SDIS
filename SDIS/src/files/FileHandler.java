@@ -24,8 +24,6 @@ public class FileHandler {
         int i = 0;
         int length;
 
-        //System.out.println(file.length());
-
         while((length = stream.read(data)) > 0) {
 
             Message msg = new Message(Peer.getProtocolVersion(), Integer.parseInt(Peer.getPeerId()),  file.getName() + file.lastModified(), i, repDegree, Arrays.copyOf(data,length));
