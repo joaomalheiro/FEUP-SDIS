@@ -4,6 +4,8 @@
 
 javac -d bin -sourcepath src src/testapp/TestApp.java src/peer/Peer.java
 
+NOTE: run this from inside SDIS folder
+
 # To run a peer : 
 
 java -classpath bin peer.Peer <protocol_version> <server_id> <service_ap> <mc_ip> <mc_port> <mdb_ip> <mdb_port> <mdr_ip> <mdr_port>
