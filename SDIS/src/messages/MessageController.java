@@ -71,7 +71,7 @@ public class MessageController implements Runnable {
      * Handles a removed message received in the MultiCast Channel
      */
 	private void handleJoined() {
-		if(header[1] == "3.0") {
+		if(header[1].equals("3.0")) {
 			Peer.getMC().getRepDegreeStorage().sendAllDeleteMessages();
 		}
 	}
